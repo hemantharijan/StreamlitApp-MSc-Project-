@@ -13,11 +13,17 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+#local_css("style.css")
 
 #Sentiment Analysis
-#Fetching and Creating Review DataFrame
-@st.cache
-def Sentiment(csv_file):
+#Fetch and Create Review DataFrame
+Review_df = pd.DataFrame()
+#@st.cache
+def Pol_Sub(csv_file):
+    global Review_df
     df = pd.read_csv(csv_file, encoding='utf-8', engine='python')
     Review_df = pd.DataFrame(df['Review'].str.lower())
     Review_df['Review'].replace('\d+', '', regex=True, inplace=True)
@@ -65,8 +71,12 @@ if choice == 'Sentiment Analysis':
     #upload csv file
     st.write(" Upload csv file")
     uploaded_file = st.file_uploader("Choose a csv file", type='csv')
+    
     if uploaded_file is not None:
-        st.write(Sentiment(uploaded_file))
+        st.write(Pol_Sub(uploaded_file))
+        if st.checkbox("Show Raw Data"):
+            st.write(Review_df)
+
         
     else:
         st.write('No data')
