@@ -20,7 +20,7 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-#local_css("style.css")
+local_css("style.css")
 
 hide_streamlit_style = """
             <style>
@@ -35,9 +35,10 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 #Fetch and Create Review DataFrame
 Review_df = pd.DataFrame()
 Sentiment_filter = pd.DataFrame()
+Sentiment_desc = pd.DataFrame()
 #@st.cache
 def Pol_Sub(csv_file):
-    global Review_df, Sentiment_filter
+    global Review_df, Sentiment_filter, Sentiment_desc
     df = pd.read_csv(csv_file, encoding='utf-8', engine='python')
     Review_df = pd.DataFrame(df['Review'].str.lower())
     Review_df['Review'].replace('\d+', '', regex=True, inplace=True)
@@ -67,7 +68,7 @@ def Pol_Sub(csv_file):
     #Filtering Sentiments_df by excluding neutral reviews for accurate values
     Sentiment_filter = Sentiments_df.loc[(Sentiments_df.loc[:,Sentiments_df.dtypes != object] !=0).any(1)] 
     Sentiment_desc = pd.DataFrame(Sentiment_filter.describe())
-    return Sentiment_desc
+    return 
 
 
 # box plot
@@ -75,7 +76,7 @@ def boxplot():
     box_fig = px.box(Sentiment_filter)
     box_fig.update_layout(
         xaxis_title="Sentiments in terms of polarity and Subjectivity",
-        yaxis_title="Range",)
+        yaxis_title="Range")
     return st.plotly_chart(box_fig)
 
 
@@ -146,7 +147,7 @@ def Word_Cloud():
                                      RE_Stopword], 
                                     ['','','','','','','','','','','','','','',''], 
                                     regex=True).str.cat(sep=' ').split())
-    wordcloud = WordCloud(min_font_size=30, width=700, height=700, colormap='brg',
+    wordcloud = WordCloud(max_font_size=100, width=700, height=700, colormap='brg',
                       background_color='white').generate(' '.join(word))
     plt.imshow(wordcloud)
     plt.axis('off')
@@ -157,23 +158,30 @@ def Word_Cloud():
 #Dashboard
 st.title('Used Car Price Analytics and Prediction')
 
+#upload csv file
+uploaded_file = st.file_uploader("Choose a csv file", type='csv')
+if uploaded_file is not None:
+    Pol_Sub(uploaded_file)
+    st.success('File is Uploaded')
+
 #SideBar Menu
-menu = ['Select','Sentiment Analysis','Used Cars Data']
+menu = ['Upload File','Sentiment Analysis','Word Frequency']
 choice = st.sidebar.selectbox("Menu",menu)
 
+
 #Sentiment Analysis
-if choice == 'Sentiment Analysis':    
-    st.header('Sentiment Analysis on user reviews')
+if choice == 'Sentiment Analysis':   
     
-    #upload csv file
-    st.write(" Upload csv file")
-    uploaded_file = st.file_uploader("Choose a csv file", type='csv')
+    #header
+    st.header('Sentiment Analysis on user reviews')     
     
     if uploaded_file is not None:
-        st.write(Pol_Sub(uploaded_file))
+        st.subheader("Polarity and Subjectivity")
+        st.write(Sentiment_desc)
         
         #Raw DataSet
-        if st.sidebar.checkbox("Show Raw Data"):
+        if st.sidebar.checkbox("Show Dataset"):
+            st.subheader('Dataset')
             st.write(Review_df)    
         
         #BoxPlot
@@ -195,8 +203,16 @@ if choice == 'Sentiment Analysis':
         #Polarity Distribution
         st.subheader('Polarity distribution')
         st.write(Pol_dist())
+    else:
+        st.subheader('Please upload a csv file!!')
 
-        #Frequent Words
+ #Word Frequency Analysis      
+elif choice == 'Word Frequency':
+
+    #Frequent Words
+    st.header("Word Frequency Analysis")
+
+    if uploaded_file is not None:
         st.subheader('Most Frequent words in DataSet')
         st.write(Word_Freq())
 
@@ -211,16 +227,8 @@ if choice == 'Sentiment Analysis':
         #Word Cloud
         st.subheader('Word Cloud')
         st.write(Word_Cloud())
-
     else:
-        st.write('No data')
-       
-elif choice == 'Used Cars Data':
-    file_path = st.file_uploader('upload file', type='csv')
-    if file_path is not None:
-        data = pd.read_csv(file_path)
-        st.dataframe(data)
-
+        st.subheader('Please upload a csv file')
 
 
 
