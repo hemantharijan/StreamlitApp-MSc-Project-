@@ -1,5 +1,5 @@
 body {
-    color: rgb(0, 0, 0);
+    
     background-color: #fff;
 }
 
@@ -12,4 +12,8 @@ body {
 
 .stTextInput>div>div>input {
     color: #4F8BF9;
+}
+
+.stHeader>header {
+    color: rgb(231, 69, 118);;
 }

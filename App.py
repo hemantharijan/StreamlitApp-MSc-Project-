@@ -16,12 +16,15 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
 
-#User Interface setting
+#..........................................Style Settings....................................................#
+
+#CSS
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 local_css("style.css")
 
+#Hiding footer
 hide_streamlit_style = """
             <style>
             footer {visibility: hidden;}
@@ -31,20 +34,27 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
 
+#..........................................Back end logic....................................................#
+
 #Sentiment Analysis Polarity and Subjectivity
-#Fetch and Create Review DataFrame
+
+#Global Variables
 Review_df = pd.DataFrame()
 Sentiment_filter = pd.DataFrame()
 Sentiment_desc = pd.DataFrame()
+
+#Fetch and Create Review DataFrame
 #@st.cache
 def Pol_Sub(csv_file):
+    
     global Review_df, Sentiment_filter, Sentiment_desc
+    
     df = pd.read_csv(csv_file, encoding='utf-8', engine='python')
     Review_df = pd.DataFrame(df['Review'].str.lower())
     Review_df['Review'].replace('\d+', '', regex=True, inplace=True)
 
     #Analysing sentiments in terms of polarity and subjectivity
-    Polarity =[]
+    Polarity =[]                            
     Subjectivity = []
 
     #Iterating every row in the column
@@ -71,7 +81,9 @@ def Pol_Sub(csv_file):
     return 
 
 
-# box plot
+#Sentiment Analysis
+
+#box plot
 def boxplot():
     box_fig = px.box(Sentiment_filter)
     box_fig.update_layout(
@@ -80,7 +92,7 @@ def boxplot():
     return st.plotly_chart(box_fig)
 
 
-# Scatter plot
+#Scatter plot
 def scatterplot():
     scatter_fig = px.scatter(Sentiment_filter, x="Polarity", y="Subjectivity")
     return st.plotly_chart(scatter_fig)
@@ -90,19 +102,16 @@ def scatterplot():
 #Covariance
 def Cov():
     polarity = Sentiment_filter['Polarity']
-    subjectivity = Sentiment_filter['Subjectivity']
-    #Finding Covariance
-    covariance = cov(polarity, subjectivity)
-    #print('Covariance Result')
-    #print(covariance)
-    #Finding Correlation
-    #print('Correlation:',corr)
+    subjectivity = Sentiment_filter['Subjectivity']   
+    covariance = cov(polarity, subjectivity)                 #Finding Covariance
     return covariance
 #correlation
+corr = 0.0
 def Corr():
+    global corr
     polarity = Sentiment_filter['Polarity']
-    subjectivity = Sentiment_filter['Subjectivity']
-    corr,_ = pearsonr(polarity, subjectivity)
+    subjectivity = Sentiment_filter['Subjectivity']    
+    corr,_ = pearsonr(polarity, subjectivity)              #Finding Correlation
     return corr
 
 
@@ -113,17 +122,22 @@ def Pol_dist():
     return st.plotly_chart(hist_fig)
 
 
-#Frequent Word
+#Word Frequency Analysis
+
+#Global Variable
 result_count = pd.DataFrame()
-def Word_Freq():
+
+#Frequent Word
+def Word_Freq(count):
+    count = int(count)
     global result_count
     stopwords = nltk.corpus.stopwords.words('english')
     RE_Stopword = r'\b(?:{})\b'.format('|'.join(stopwords))
-    word = (Review_df['Review'].replace([r'\!',r'\@',r'\#',r'\$',r'\%',r'\-',r'\&',r'\*',r'\(',r'\'',r'\.',r'\,','r\_',r'\>',
-                                     RE_Stopword], 
-                                    ['','','','','','','','','','','','','','',''], 
+    word = (Review_df['Review'].replace([r'\!',r'\@',r'\#',r'\$',r'\%',r'\-',r'\&',r'\*',
+                                    r'\(',r'\'',r'\.',r'\,',r'\_',r'\>',r'\’',RE_Stopword], 
+                                    ['','','','','','','','','','','','','','','',''], 
                                     regex=True).str.cat(sep=' ').split())
-    result_count = pd.DataFrame(Counter(word).most_common(10),columns=['Word','Frequency'])
+    result_count = pd.DataFrame(Counter(word).most_common(count),columns=['Word','Frequency'])
     return result_count
 
 
@@ -155,6 +169,8 @@ def Word_Cloud():
     return st.pyplot()
 
 
+#..........................................User InterFace....................................................#
+
 #Dashboard
 st.title('Used Car Price Analytics and Prediction')
 
@@ -175,6 +191,7 @@ if choice == 'Sentiment Analysis':
     #header
     st.header('Sentiment Analysis on user reviews')     
     
+    #File Check
     if uploaded_file is not None:
         st.subheader("Polarity and Subjectivity")
         st.write(Sentiment_desc)
@@ -203,18 +220,25 @@ if choice == 'Sentiment Analysis':
         #Polarity Distribution
         st.subheader('Polarity distribution')
         st.write(Pol_dist())
+
+        if corr >= 0.0:
+            st.success("From our above analysis the polarity increases as subjectivity increases and the correlation betweent them is positive, so the overall Feedback  is towards positive direction")
     else:
         st.subheader('Please upload a csv file!!')
 
- #Word Frequency Analysis      
+#Word Frequency Analysis      
 elif choice == 'Word Frequency':
 
     #Frequent Words
     st.header("Word Frequency Analysis")
+    count = st.sidebar.number_input("Word count number",min_value=10.00, step=1.00)
 
+    #File Check
     if uploaded_file is not None:
         st.subheader('Most Frequent words in DataSet')
-        st.write(Word_Freq())
+        
+        #Word count
+        st.write(Word_Freq(count))
 
         #Bar Chart
         st.subheader('Bar Chart')
@@ -227,6 +251,7 @@ elif choice == 'Word Frequency':
         #Word Cloud
         st.subheader('Word Cloud')
         st.write(Word_Cloud())
+
     else:
         st.subheader('Please upload a csv file')
 
