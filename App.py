@@ -1,28 +1,12 @@
-import nltk
-import numpy as np
-import pandas as pd
 import streamlit as st
-import plotly.express as px
-import matplotlib.pyplot as plt
-import plotly.figure_factory as ff
-
-from io import StringIO, BytesIO
-from numpy import cov
-from textblob import TextBlob
-from collections import Counter
-from scipy.stats import pearsonr
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 
 import awesome_streamlit as ast
 import pages.Sentiment
 import pages.WordFreq
+
 ast.core.services.other.set_logging_format()
 
-
-
 st.set_option('deprecation.showfileUploaderEncoding', False)
-
-
 
 #CSS
 def local_css(file_name):
