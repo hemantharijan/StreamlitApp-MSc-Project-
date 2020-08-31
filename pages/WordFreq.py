@@ -41,7 +41,9 @@ def Word_Freq(count):
                                     r'\(',r'\'',r'\.',r'\,',r'\_',r'\>',r'\’',RE_Stopword], 
                                     ['','','','','','','','','','','','','','','',''], 
                                     regex=True).str.cat(sep=' ').split())
-    result_count = pd.DataFrame(Counter(word).most_common(count),columns=['Word','Frequency'])
+    count = pd.DataFrame(Counter(word).most_common(count+1),columns=['Word','Frequency'])
+    count.drop(count.loc[count['Word']== 'car'].index, inplace=True)
+    result_count = pd.DataFrame(count)
     return result_count
 
 
@@ -61,9 +63,9 @@ def Pie_chart():
 def Word_Cloud():
     stopwords = nltk.corpus.stopwords.words('english')
     RE_Stopword = r'\b(?:{})\b'.format('|'.join(stopwords))
-    word = (Review_df['Review'].replace([r'\!',r'\@',r'\#',r'\$',r'\%',r'\-',r'\&',r'\*',r'\(',r'\'',r'\.',r'\,','r\_',r'\>',
+    word = (Review_df['Review'].replace([r'\!',r'\@',r'\#',r'\$',r'\%',r'\-',r'\&',r'\*',r'\(',r'\'',r'\.',r'\,',r'\_',r'\>','car',
                                      RE_Stopword], 
-                                    ['','','','','','','','','','','','','','',''], 
+                                    ['','','','','','','','','','','','','','','',''], 
                                     regex=True).str.cat(sep=' ').split())
     wordcloud = WordCloud(max_font_size=100, width=700, height=700, colormap='brg',
                       background_color='white').generate(' '.join(word))
@@ -76,8 +78,8 @@ def Word_Cloud():
 #..........................................User InterFace....................................................#
 def write():
     st.title("Word Frequency")
-
-    uploaded_file = st.file_uploader("Choose a csv filee", type='csv')
+    
+    uploaded_file = st.file_uploader("Choose a csv file for analysis", type='csv')
     if uploaded_file is not None:
         Pol_Sub(uploaded_file)
         

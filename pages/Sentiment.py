@@ -8,13 +8,16 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import plotly.figure_factory as ff
 
+import streamlit.components.v1 as components
 
 from numpy import cov
 from textblob import TextBlob
 from scipy.stats import pearsonr
 
+from PIL import Image
 
 
+#....................................................Logic..........................................................
 #Sentiment Analysis Polarity and Subjectivity
 
 #Global Variables
@@ -98,12 +101,21 @@ def Pol_dist():
     return st.plotly_chart(hist_fig)
 
 
+
+#..............................................................UI........................................................
 def write():
+
+    sad = Image.open("D:/Hemant/Msc/Sem 3/project/images/sad.png")
+    neutral = Image.open("D:/Hemant/Msc/Sem 3/project/images/neutral.png")
+    happy = Image.open("D:/Hemant/Msc/Sem 3/project/images/Happy.png")
 
     #ast.shared.components.title_awesome("Sentiment")
     st.title("Sentiment Analysis")
-
-    uploaded_file = st.file_uploader("Choose a csv filee", type='csv')
+    img = [sad, neutral, happy]
+    st.image(img, caption=["sad","neutral","happy"], clamp=False, width=50)
+    #components.html(sentiment_emojis, height=200)
+     
+    uploaded_file = st.file_uploader("Choose a csv file for analysis", type='csv')
     if uploaded_file is not None:
         Pol_Sub(uploaded_file)
 

@@ -12,12 +12,13 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-local_css("style.css")
+#local_css("style.css")
 
 #Hiding footer
 hide_streamlit_style = """
             <style>
             footer {visibility: hidden;}
+            fullscress {visibility:hidden;}
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
@@ -30,8 +31,8 @@ PAGES = {
 
 def main():
     st.sidebar.title("Menu")
+    
     selection = st.sidebar.radio("Go to",list(PAGES.keys()))
-
     page = PAGES[selection]
     with st.spinner(f"Loading Data..."):
         ast.shared.components.write_page(page)
