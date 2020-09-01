@@ -115,11 +115,11 @@ def write():
     st.image(img, caption=["sad","neutral","happy"], clamp=False, width=50)
     #components.html(sentiment_emojis, height=200)
      
-    uploaded_file = st.file_uploader("Choose a csv file for analysis", type='csv')
+    uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
     if uploaded_file is not None:
         Pol_Sub(uploaded_file)
 
-        st.subheader("Polarity and Subjectivity")
+        st.subheader("DataSet Discription")
         st.write(Sentiment_desc)
         
         #Raw DataSet

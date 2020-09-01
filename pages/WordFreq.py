@@ -79,7 +79,7 @@ def Word_Cloud():
 def write():
     st.title("Word Frequency")
     
-    uploaded_file = st.file_uploader("Choose a csv file for analysis", type='csv')
+    uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
     if uploaded_file is not None:
         Pol_Sub(uploaded_file)
         
