@@ -1,0 +1,16 @@
+body{
+    background-color: white;
+    color: #6a89cc;
+}
+
+.sidebar .sidebar-content {
+    background-image: linear-gradient( #4299e1,#4299e1);
+    color: white;
+    height: 100vh;
+    width: 300px;
+}
+
+.radio .radio-content {
+    background-image: linear-gradient(white,white);
+    color: white;
+}

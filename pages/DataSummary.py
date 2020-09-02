@@ -12,6 +12,8 @@ import streamlit.components.v1 as components
 from pandas_profiling import  ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 
+
+@st.cache
 def carData(data):
 
     df = pd.read_csv(data,engine="python")
@@ -21,6 +23,7 @@ def carData(data):
 def write():
     
     data = st.sidebar.file_uploader('upload car data file', type='csv')
+    st.title('DataSet Summary')
     if data is not None:
         profile = ProfileReport(carData(data))
         st_profile_report(profile)     

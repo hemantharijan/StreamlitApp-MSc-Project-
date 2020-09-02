@@ -18,18 +18,22 @@ from PIL import Image
 
 
 #....................................................Logic..........................................................
+
 #Sentiment Analysis Polarity and Subjectivity
 
 #Global Variables
 Review_df = pd.DataFrame()
 Sentiment_filter = pd.DataFrame()
 Sentiment_desc = pd.DataFrame()
+positive_count = pd.DataFrame()
+negative_count = pd.DataFrame()
+neutral_count = pd.DataFrame()
 
 #Fetch and Create Review DataFrame
 #@st.cache
 def Pol_Sub(csv_file):
     
-    global Review_df, Sentiment_filter, Sentiment_desc
+    global Review_df, Sentiment_filter, Sentiment_desc, positive_count, negative_count, neutral_count
     
     df = pd.read_csv(csv_file, encoding='utf-8', engine='python')
     Review_df = pd.DataFrame(df['Review'].str.lower())
@@ -59,6 +63,16 @@ def Pol_Sub(csv_file):
 
     #Filtering Sentiments_df by excluding neutral reviews for accurate values
     Sentiment_filter = Sentiments_df.loc[(Sentiments_df.loc[:,Sentiments_df.dtypes != object] !=0).any(1)] 
+
+    #Positive count
+    positive_count = Sentiments_df.loc[Sentiments_df['Polarity'] >0] 
+
+    #Negative count
+    negative_count = Sentiments_df.loc[Sentiments_df['Polarity'] <0]
+
+    #Neutral count
+    neutral_count = Sentiments_df.loc[Sentiments_df['Polarity'] ==0]
+
     Sentiment_desc = pd.DataFrame(Sentiment_filter.describe())
     return 
 
@@ -105,20 +119,51 @@ def Pol_dist():
 #..............................................................UI........................................................
 def write():
 
-    sad = Image.open("D:/Hemant/Msc/Sem 3/project/images/sad.png")
-    neutral = Image.open("D:/Hemant/Msc/Sem 3/project/images/neutral.png")
-    happy = Image.open("D:/Hemant/Msc/Sem 3/project/images/Happy.png")
-
-    #ast.shared.components.title_awesome("Sentiment")
-    st.title("Sentiment Analysis")
-    img = [sad, neutral, happy]
-    st.image(img, caption=["sad","neutral","happy"], clamp=False, width=50)
-    #components.html(sentiment_emojis, height=200)
+    components.html(f"""
+             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                <div class="flex pt-12">
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                    Sentiment Analysis
+                    </div>
+                </div>
+    """)
      
     uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
     if uploaded_file is not None:
         Pol_Sub(uploaded_file)
 
+        positive_c= positive_count.shape
+        negative_c= negative_count.shape
+        neutral_c=  neutral_count.shape
+
+        components.html(f"""
+             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                
+                <div class="flex justify-center  gap-x-2">
+                    
+                    <div class="max-w-sm overflow-hidden shadow-lg">
+                        <div class="text-md px-10 pt-4">Positive Statements</div>
+                        <div class="px-24 font-bold text-2xl pb-2 text-blue-500">
+                            <span>{positive_c[0]}</span>
+                        </div>
+                    </div>
+
+                    <div class="max-w-sm overflow-hidden shadow-lg">
+                        <div class="text-md px-10 pt-4">Negative Statements</div>
+                        <div class="px-24 font-bold text-2xl pb-2 text-red-500">
+                            <span>{negative_c[0]}</span>
+                        </div>
+                    </div>
+
+                    <div class="max-w-sm overflow-hidden shadow-lg">
+                        <div class="text-md px-10 pt-4">Neutral Statements</div>
+                        <div class="px-24 font-bold text-2xl pb-2 text-gray-500">
+                            <span>{neutral_c[0]}</span>
+                        </div>
+                    </div>
+
+                </div>""")
+    
         st.subheader("DataSet Discription")
         st.write(Sentiment_desc)
         

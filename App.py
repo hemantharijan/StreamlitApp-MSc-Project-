@@ -16,7 +16,7 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-#local_css("style.css")
+local_css("style.css")
 
 #Hiding footer
 hide_streamlit_style = """
@@ -27,42 +27,23 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
-
 Menu1 = {
     "Sentiment Analysis":pages.Sentiment,
     "Word Frequency":pages.WordFreq,
-    "Upload Car Data": pages.DataSummary,
+    "Data Summary": pages.DataSummary,
     "Price Distribution": pages.PriceDistribution
 }
 
-
 def main():
-    st.sidebar.title("Menu")   
-    selection = st.sidebar.radio("Go to",list(Menu1.keys()))
-    
-    st.sidebar.markdown(
-           """<head><style>
-                .color{ 
-                    color:blue;
-                    background-color:blue;
-                    height:3px;
-                    widht:50px;}</style></head>
-                <div class="color"></div>""", unsafe_allow_html=True)
-    
+    st.sidebar.title("Menu")
+    selection = st.sidebar.radio("",list(Menu1.keys()))
     page = Menu1[selection]
     if selection is not False:
         with st.spinner(f"Loading Data..."):
+            menu  =st.sidebar.title(selection)
             ast.shared.components.write_page(page)
-            print(selection)
-            st.sidebar.markdown(
-                """<head><style>
-                    .color{
-                        color:blue;
-                        background-color:blue;
-                        height:3px;
-                        widht:50px;}</style></head>
-                    <div class="color"></div>""", unsafe_allow_html=True)
-    
+            #print(selection)
+            
 if __name__=="__main__":
     main()
 

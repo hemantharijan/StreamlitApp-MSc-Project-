@@ -23,7 +23,6 @@ def brand(brandname):
     df_brand= df.loc[df['Brand']==brandname]
     return 
 
-
 def scatterPlot():
     fig = go.Figure(data=go.Scatter(
     x=df_brand['Year_Of_Registration'],
@@ -48,40 +47,51 @@ def write():
         brandlist = df['Brand'].unique().tolist()
         brandname = st.selectbox('Select car brand',brandlist)
         brand(brandname)
-        
-        if st.sidebar.checkbox('Show data'):
-            st.write(df_brand)
+
         data_count = df_brand.shape
-        
+        ywmd = df_brand.loc[df_brand['Price_inEURO']==df_brand['Price_inEURO'].max()]
+        ywmd = ywmd['Year_Of_Registration'].values.tolist()
+
         components.html(f"""
             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 
-            <div class="flex flex-wrap">
+            <div class="flex">
     
-                <div class="max-w-sm rounded overflow-hidden shadow-lg">
-                    <div class="px-6 py-4">
-                        <div class="font-bold text-xl mb-2"><span>Total Count</span></div>
+                <div class="max-w-sm rounded-md overflow-hidden shadow-lg">
+                    <div class="px-6 pt-2">
+                        <div class="text-l"><span>Total Count</span></div>
                     </div>
-                    <div class="px-6 pt-4 pb-2"><span>{data_count[0]}</span></div>
+                    <div class="px-6 font-bold text-xl pb-2"><span>{data_count[0]}</span></div>
                 </div>
     
-                <div class="max-w-sm rounded overflow-hidden shadow-lg">
-                    <div class="px-6 py-4">
-                        <div class="font-bold text-xl mb-2"><span>Max Price</span></div>
+                <div class="max-w-sm rounded-md overflow-hidden shadow-lg">
+                    <div class="px-6 pt-2">
+                        <div class="text-l"><span>Max Price</span></div>
                     </div>
-                    <div class="px-6 pt-4 pb-2"><span>{df_brand['Price_inEURO'].max()} €</span></div>
+                    <div class="px-6 font-bold text-xl pb-2"><span>{df_brand['Price_inEURO'].max()} €</span></div>
                 </div>
     
-                <div class="max-w-sm rounded overflow-hidden shadow-lg">
-                    <div class="px-6 py-4">
-                        <div class="font-bold text-xl mb-2"><span>Min Price</span></div>
+                <div class="max-w-sm rounded-md overflow-hidden shadow-lg">
+                    <div class="px-6 pt-2">
+                        <div class="text-l"><span>Min Price</span></div>
                     </div>
-                    <div class="px-6 pt-4 pb-2"><span>{df_brand['Price_inEURO'].min()} €</span></div>
+                    <div class="px-6 text-xl font-bold pb-2"><span>{df_brand['Price_inEURO'].min()} €</span></div>
+                </div>
+
+                <div class="max-w-sm rounded-md overflow-hidden shadow-lg">
+                    <div class="px-6 pt-2">
+                        <div class="text-l"><span>Year with max distribution</span></div>
+                    </div>
+                    <div class="px-6 pb-2 text-xl font-bold"><span>{ywmd[0]}</span></div>
                 </div>
             
-            </div>""")
+            </div>""",height=100)
         
         scatterPlot()
+
+        if st.sidebar.checkbox('Show data'):
+            st.write(df_brand)
+        
 
     else:
         st.header('Please upload your data file')
