@@ -7,7 +7,8 @@ import streamlit as st
 import plotly.express as px
 import matplotlib.pyplot as plt
 import plotly.figure_factory as ff
-
+import altair as alt
+import time
 import streamlit.components.v1 as components
 
 from numpy import cov
@@ -114,8 +115,6 @@ def Pol_dist():
     hist_fig = ff.create_distplot(hist_data, group_labels=['Polarity'], bin_size=.05)
     return st.plotly_chart(hist_fig)
 
-
-
 #..............................................................UI........................................................
 def write():
 
@@ -141,61 +140,117 @@ def write():
                 
                 <div class="flex justify-center  gap-x-2">
                     
-                    <div class="max-w-sm overflow-hidden shadow-lg">
-                        <div class="text-md px-10 pt-4">Positive Statements</div>
-                        <div class="px-24 font-bold text-2xl pb-2 text-blue-500">
+                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
+                        <div class="text-md px-8 pt-4">Positive Statements</div>
+                        <div class="px-20 font-bold text-2xl pb-2 text-blue-500">
                             <span>{positive_c[0]}</span>
                         </div>
                     </div>
 
-                    <div class="max-w-sm overflow-hidden shadow-lg">
-                        <div class="text-md px-10 pt-4">Negative Statements</div>
-                        <div class="px-24 font-bold text-2xl pb-2 text-red-500">
+                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
+                        <div class="text-md px-8 pt-4">Negative Statements</div>
+                        <div class="px-20 font-bold text-2xl pb-2 text-red-500">
                             <span>{negative_c[0]}</span>
                         </div>
                     </div>
 
-                    <div class="max-w-sm overflow-hidden shadow-lg">
-                        <div class="text-md px-10 pt-4">Neutral Statements</div>
-                        <div class="px-24 font-bold text-2xl pb-2 text-gray-500">
+                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
+                        <div class="text-md px-8 pt-4">Neutral Statements</div>
+                        <div class="px-20 font-bold text-2xl pb-2 text-gray-500">
                             <span>{neutral_c[0]}</span>
                         </div>
                     </div>
 
                 </div>""")
-    
-        st.subheader("DataSet Discription")
-        st.write(Sentiment_desc)
-        
+
+        components.html(f"""
+             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                <div class="flex">
+
+                    <div class="rounded-lg shadow-lg overflow-hidden rounded-md bg-blue-500 px-4 py-4 ">
+                        
+                        <span class="text-white text-xl font-bold ">DataSet Overview</span>
+                        
+                        <div class="pt-4 text-white text-lg">
+                            <span>Polarity<span>
+                        <div>
+                        
+                        <div class="flex flex-wrap pt-4 gap-x-2 gap-y-2">    
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-6 text-blue-500 pt-2">Mean</div>
+                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
+                                    <span>{positive_c[0]}</span>
+                                </div>
+                            </div>    
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-6 text-blue-500 pt-2">STD</div>
+                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
+                                    <span>{positive_c[0]}</span>
+                                </div>
+                            </div>    
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-6 text-blue-500 pt-2">Min</div>
+                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
+                                    <span>{positive_c[0]}</span>
+                                </div>
+                            </div>    
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-6 text-blue-500 pt-2">Max</div>
+                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
+                                    <span>{positive_c[0]}</span>
+                                </div>
+                            </div>       
+                        </div>
+
+                        <div class="pt-4 text-white text-lg">
+                            <span>Subjectivity<span>
+                        <div>
+                        
+                        <div class="flex flex-wrap pt-4 gap-x-2 gap-y-2">    
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-6 text-blue-500 pt-2">Mean</div>
+                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
+                                    <span>{positive_c[0]}</span>
+                                </div>
+                            </div>    
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-6 text-blue-500 pt-2">STD</div>
+                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
+                                    <span>{positive_c[0]}</span>
+                                </div>
+                            </div>    
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-6 text-blue-500 pt-2">Min</div>
+                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
+                                    <span>{positive_c[0]}</span>
+                                </div>
+                            </div>    
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-6 text-blue-500 pt-2">Max</div>
+                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
+                                    <span>{positive_c[0]}</span>
+                                </div>
+                            </div>       
+                        </div>
+
+                    </div>   
+                </div>
+                
+                """,height=320)
+        scatterplot()
         #Raw DataSet
         if st.sidebar.checkbox("Show Dataset"):
             st.subheader('Dataset')
             st.write(Review_df)    
-        
-        #BoxPlot
-        st.subheader('Box Plot')
-        st.write(boxplot())
 
-        #ScatterPlot
-        st.subheader('Scatter Plot')
-        st.write(scatterplot())
-
-        #Covariance
-        st.subheader('Covariance')
-        st.write(Cov())
-
-        #Correlation
-        st.subheader('Correlation')
-        st.text(Corr())
-
-        #Polarity Distribution
-        st.subheader('Polarity distribution')
-        st.write(Pol_dist())
-
-        if corr >= 0.0:
-            st.success("From our above analysis the polarity increases as subjectivity increases and the correlation betweent them is positive, so the overall Feedback  is towards positive direction")
     else:
-        st.subheader('Please upload a csv file!!')
+        st.subheader('Upload a csv file!!')
 
 
 
