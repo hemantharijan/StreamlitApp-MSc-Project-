@@ -77,15 +77,6 @@ def Pol_Sub(csv_file):
     Sentiment_desc = pd.DataFrame(Sentiment_filter.describe())
     return 
 
-#box plot
-def boxplot():
-    box_fig = px.box(Sentiment_filter)
-    box_fig.update_layout(
-        xaxis_title="Sentiments in terms of polarity and Subjectivity",
-        yaxis_title="Range")
-    return st.plotly_chart(box_fig)
-
-
 #Scatter plot
 def scatterplot():
     scatter_fig = px.scatter(Sentiment_filter, x="Polarity", y="Subjectivity")
@@ -111,16 +102,23 @@ def Corr():
 
 #Polarity Distribution
 def Pol_dist():
-    hist_data = [Sentiment_filter.Polarity.values.tolist()]
-    hist_fig = ff.create_distplot(hist_data, group_labels=['Polarity'], bin_size=.05)
-    return st.plotly_chart(hist_fig)
+    hist_data = [Sentiment_filter.Polarity.values, Sentiment_filter.Subjectivity.values]
+    group_labels = ['Polarity','Subjectivity']
+    colors = ['#333F44', '#37AA9C']
+    fig = ff.create_distplot(hist_data, group_labels, show_hist=False, colors=colors)
+    fig.update_layout(
+        height= 700,
+        width=800
+    )
+    return st.plotly_chart(fig)
+    
 
 #..............................................................UI........................................................
 def write():
 
     components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-                <div class="flex pt-12">
+                <div class="flex">
                     <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
                     Sentiment Analysis
                     </div>
@@ -142,31 +140,36 @@ def write():
                     
                     <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
                         <div class="text-md px-8 pt-4">Positive Statements</div>
-                        <div class="px-20 font-bold text-2xl pb-2 text-blue-500">
+                        <div class="text-center font-bold text-2xl pb-2 text-blue-500">
                             <span>{positive_c[0]}</span>
                         </div>
                     </div>
 
                     <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
                         <div class="text-md px-8 pt-4">Negative Statements</div>
-                        <div class="px-20 font-bold text-2xl pb-2 text-red-500">
+                        <div class="text-center font-bold text-2xl pb-2 text-red-500">
                             <span>{negative_c[0]}</span>
                         </div>
                     </div>
 
                     <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
                         <div class="text-md px-8 pt-4">Neutral Statements</div>
-                        <div class="px-20 font-bold text-2xl pb-2 text-gray-500">
+                        <div class="text-center font-bold text-2xl pb-2 text-gray-500">
                             <span>{neutral_c[0]}</span>
                         </div>
                     </div>
-
                 </div>""")
+
+        mean = Sentiment_desc.loc['mean'].tolist()
+        std = Sentiment_desc.loc['std'].tolist()
+        mini = Sentiment_desc.loc['min'].tolist()
+        maxi = Sentiment_desc.loc['max'].tolist() 
 
         components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                
                 <div class="flex">
-
+                    
                     <div class="rounded-lg shadow-lg overflow-hidden rounded-md bg-blue-500 px-4 py-4 ">
                         
                         <span class="text-white text-xl font-bold ">DataSet Overview</span>
@@ -177,30 +180,30 @@ def write():
                         
                         <div class="flex flex-wrap pt-4 gap-x-2 gap-y-2">    
                             <div class="bg-white rounded-md text-center shadow-lg">
-                                <div class="text-sm px-6 text-blue-500 pt-2">Mean</div>
-                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
-                                    <span>{positive_c[0]}</span>
+                                <div class="text-sm px-10 text-blue-500 pt-2">Mean</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{"{:.3f}".format(mean[0])}</span>
                                 </div>
                             </div>    
 
                             <div class="bg-white rounded-md text-center shadow-lg">
-                                <div class="text-sm px-6 text-blue-500 pt-2">STD</div>
-                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
-                                    <span>{positive_c[0]}</span>
+                                <div class="text-sm px-10 text-blue-500 pt-2">STD</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{"{:.3f}".format(std[0])}</span>
                                 </div>
                             </div>    
 
                             <div class="bg-white rounded-md text-center shadow-lg">
-                                <div class="text-sm px-6 text-blue-500 pt-2">Min</div>
-                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
-                                    <span>{positive_c[0]}</span>
+                                <div class="text-sm px-10 text-blue-500 pt-2">Min</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{"{:.2f}".format(mini[0])}</span>
                                 </div>
                             </div>    
 
                             <div class="bg-white rounded-md text-center shadow-lg">
-                                <div class="text-sm px-6 text-blue-500 pt-2">Max</div>
-                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
-                                    <span>{positive_c[0]}</span>
+                                <div class="text-sm px-10 text-blue-500 pt-2">Max</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{"{:.2f}".format(maxi[0])}</span>
                                 </div>
                             </div>       
                         </div>
@@ -211,39 +214,38 @@ def write():
                         
                         <div class="flex flex-wrap pt-4 gap-x-2 gap-y-2">    
                             <div class="bg-white rounded-md text-center shadow-lg">
-                                <div class="text-sm px-6 text-blue-500 pt-2">Mean</div>
-                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
-                                    <span>{positive_c[0]}</span>
+                                <div class="text-sm px-10 text-blue-500 pt-2">Mean</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{"{:.3f}".format(mean[1])}</span>
                                 </div>
                             </div>    
 
                             <div class="bg-white rounded-md text-center shadow-lg">
-                                <div class="text-sm px-6 text-blue-500 pt-2">STD</div>
-                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
-                                    <span>{positive_c[0]}</span>
+                                <div class="text-sm px-10 text-blue-500 pt-2">STD</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{"{:.3f}".format(std[1])}</span>
                                 </div>
                             </div>    
 
                             <div class="bg-white rounded-md text-center shadow-lg">
-                                <div class="text-sm px-6 text-blue-500 pt-2">Min</div>
-                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
-                                    <span>{positive_c[0]}</span>
+                                <div class="text-sm px-10 text-blue-500 pt-2">Min</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{"{:.2f}".format(mini[1])}</span>
                                 </div>
                             </div>    
 
                             <div class="bg-white rounded-md text-center shadow-lg">
-                                <div class="text-sm px-6 text-blue-500 pt-2">Max</div>
-                                <div class="px-8 font-bold text-md pb-2 text-blue-500">
-                                    <span>{positive_c[0]}</span>
+                                <div class="text-sm px-10 text-blue-500 pt-2">Max</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{"{:.2f}".format(maxi[1])}</span>
                                 </div>
                             </div>       
                         </div>
-
                     </div>   
-                </div>
-                
-                """,height=320)
-        scatterplot()
+                </div>""",height=320)
+
+        Pol_dist()
+        
         #Raw DataSet
         if st.sidebar.checkbox("Show Dataset"):
             st.subheader('Dataset')
@@ -251,8 +253,6 @@ def write():
 
     else:
         st.subheader('Upload a csv file!!')
-
-
 
 if __name__=="__main__":
     write()

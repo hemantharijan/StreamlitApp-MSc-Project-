@@ -1,5 +1,6 @@
 import streamlit as st
 import awesome_streamlit as ast
+import streamlit.components.v1 as components
 
 import nltk
 import numpy as np
@@ -20,20 +21,20 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 Review_df = pd.DataFrame()
 
 def Pol_Sub(csv_file):
-    
-    global Review_df
 
+    global Review_df
     df = pd.read_csv(csv_file, encoding='utf-8', engine='python')
     Review_df = pd.DataFrame(df['Review'].str.lower())
     Review_df['Review'].replace('\d+', '', regex=True, inplace=True)
+    
     return
 
 #Global Variable
 result_count = pd.DataFrame()
 
 #Frequent Word
-def Word_Freq(count):
-    count = int(count)
+def Word_Freq():
+    count = 10
     global result_count
     stopwords = nltk.corpus.stopwords.words('english')
     RE_Stopword = r'\b(?:{})\b'.format('|'.join(stopwords))
@@ -49,15 +50,11 @@ def Word_Freq(count):
 
 #Bar Chart
 def Bar_chart():
-    bar_fig = px.bar(result_count, x='Word', y='Frequency')
-    return st.plotly_chart(bar_fig)
-
-
-#Pie Chart
-def Pie_chart():
-    pie_fig = px.pie(result_count,values='Frequency',names='Word')
-    return st.plotly_chart(pie_fig)
-
+    fig = px.bar(result_count, x='Word', y='Frequency',
+             hover_data=['Word', 'Frequency'], color='Frequency',
+             labels={'Word':'Frequency'}, height=500, width=700)
+    
+    return st.plotly_chart(fig)
 
 #Word Cloud
 def Word_Cloud():
@@ -67,7 +64,7 @@ def Word_Cloud():
                                      RE_Stopword], 
                                     ['','','','','','','','','','','','','','','',''], 
                                     regex=True).str.cat(sep=' ').split())
-    wordcloud = WordCloud(max_font_size=100, width=700, height=700, colormap='brg',
+    wordcloud = WordCloud(max_font_size=150, width=1920, height=1080, colormap='brg',
                       background_color='white').generate(' '.join(word))
     plt.imshow(wordcloud)
     plt.axis('off')
@@ -77,38 +74,121 @@ def Word_Cloud():
 
 #..........................................User InterFace....................................................#
 def write():
-    st.title("Word Frequency")
     
     uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
+    
     if uploaded_file is not None:
+        
         Pol_Sub(uploaded_file)
+        Word_Freq()
+
+        words = result_count['Word'].values.tolist()
+        frequency = result_count['Frequency'].values.tolist()
+
+        components.html(f"""
+             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                
+                <div class="flex pb-8">    
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                        Word Frequency
+                    </div>
+                </div>
+                
+                <div class="flex">
+                    <div class="flex rounded-md shadow-lg bg-blue-500  px-4 py-4 m-2">
+                        <span class="text-white font-bold text-lg">Top 10 words with maximum frequency<span>
+
+                        <div class="flex flex-wrap justify-center pt-4 gap-x-2 gap-y-2">
+                            
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[0]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[0]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[1]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[1]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[2]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[2]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[3]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[3]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[4]}</div>
+                                <div class="text-center font-bold text-lg pb-2 text-blue-500">
+                                    <span>{frequency[4]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[5]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[5]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[6]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[6]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[7]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[7]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 text-indigo-700 pt-2">{words[8]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[8]}</span>
+                                </div>
+                            </div>     
+
+                            <div class="bg-white rounded-md text-center shadow-lg">
+                                <div class="text-sm px-10 pt-2 text-indigo-700">{words[9]}</div>
+                                <div class="text-center font-bold text-md pb-2 text-blue-500">
+                                    <span>{frequency[9]}</span>
+                                </div>
+                            </div>     
+                        </div>
+                        </div>
+                    </div>
+                </div>         
+                """,height=335)
         
-        #Frequent Words
-        st.header("Word Frequency Analysis")
-        count = st.sidebar.number_input("Word count number",min_value=10.00, step=1.00)
+        Bar_chart()
 
-        #File Check
-        # if uploaded_file is not None:
-        st.subheader('Most Frequent words in DataSet')
+        components.html(f"""
+             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                <div class="flex pt-8">
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                    Word Cloud
+                    </div>
+                </div>""")
         
-        #Word count
-        st.write(Word_Freq(count))
-
-        #Bar Chart
-        st.subheader('Bar Chart')
-        st.write(Bar_chart())
-
-        #Pie Chart
-        st.subheader('Pie Chart')
-        st.write(Pie_chart())
-
-        #Word Cloud
-        st.subheader('Word Cloud')
-        st.write(Word_Cloud())
+        Word_Cloud()    
 
     else:
         st.subheader('Please upload a csv file')
-
 
 if __name__=="__main__":
     write()
