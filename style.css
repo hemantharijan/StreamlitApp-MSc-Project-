@@ -6,7 +6,6 @@ body{
 .sidebar .sidebar-content {
     background-image: linear-gradient( #4299e1,#4299e1);
     color: white;
-    height: 100vh;
     width: 300px;
 }
 
