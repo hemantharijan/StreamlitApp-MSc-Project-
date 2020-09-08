@@ -5,6 +5,7 @@ import pages.Sentiment
 import pages.WordFreq
 import pages.DataSummary
 import pages.PriceDistribution
+import pages.kmDistribution
 
 import streamlit.components.v1 as components
 
@@ -31,7 +32,8 @@ Menu1 = {
     "Sentiment Analysis":pages.Sentiment,
     "Word Frequency":pages.WordFreq,
     "Data Summary": pages.DataSummary,
-    "Price Distribution": pages.PriceDistribution
+    "Price Distribution": pages.PriceDistribution,
+    "Km Distribution": pages.kmDistribution
 }
 
 def main():

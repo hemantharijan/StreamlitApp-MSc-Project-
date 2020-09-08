@@ -94,7 +94,7 @@ def write():
         YearCorr()
         Menu1 = ["Year to Year","Month wise","Average distribution per year"]
             
-        choice = st.sidebar.radio("",list(Menu1))
+        choice = st.sidebar.radio("",Menu1)
 
         if choice == "Year to Year":
             #print(choice)
