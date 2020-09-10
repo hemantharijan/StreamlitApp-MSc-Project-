@@ -123,7 +123,7 @@ def write():
                     Sentiment Analysis
                     </div>
                 </div>
-    """,height=75)
+    """,height=90)
      
     
     if uploaded_file is not None:
@@ -158,7 +158,7 @@ def write():
                             <span>{neutral_c[0]}</span>
                         </div>
                     </div>
-                </div>""")
+                </div>""",height=100)
 
         mean = Sentiment_desc.loc['mean'].tolist()
         std = Sentiment_desc.loc['std'].tolist()
@@ -242,7 +242,7 @@ def write():
                             </div>       
                         </div>
                     </div>   
-                </div>""",height=320)
+                </div>""",height=310)
 
         Pol_dist()
         

@@ -26,22 +26,6 @@ def countplot():
 
     return st.pyplot()
 
-def scatterPlot():
-    fig = go.Figure(data=go.Scatter(
-    x= df['Km_Driven'],
-    y= df['Price_inEURO'],
-    mode='markers',
-    #height=700,
-    marker=dict(
-        size=8,
-        color= df['Price_inEURO'], 
-        colorscale='Viridis',
-        showscale=True
-    )))
-    return st.plotly_chart(fig)
-
-
-
 def write():
 
     components.html(f"""
@@ -57,7 +41,7 @@ def write():
 
     if fileupload is not None:
 
-        sub_menu = ['5k to 30k','40k to 70k','80k to 150k','Price over Kilometer']
+        sub_menu = ['5k to 30k','40k to 70k','80k to 150k']
 
         choice = st.sidebar.radio("",sub_menu)
 
@@ -72,9 +56,6 @@ def write():
         elif choice == '80k to 150k':
             range(fileupload,80000,150000)
             countplot()
-
-        elif choice == 'Price over Kilometer':
-            scatterPlot()
 
     else:
         st.subheader('Upload data file!!')       
