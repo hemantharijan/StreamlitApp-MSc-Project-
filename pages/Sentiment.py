@@ -115,7 +115,7 @@ def Pol_dist():
 
 #..............................................................UI........................................................
 def write():
-
+    uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
     components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex">
@@ -123,9 +123,9 @@ def write():
                     Sentiment Analysis
                     </div>
                 </div>
-    """)
+    """,height=75)
      
-    uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
+    
     if uploaded_file is not None:
         Pol_Sub(uploaded_file)
 
@@ -252,7 +252,7 @@ def write():
             st.write(Review_df)    
 
     else:
-        st.subheader('Upload a csv file!!')
+        st.subheader('Upload data file!!')
 
 if __name__=="__main__":
     write()

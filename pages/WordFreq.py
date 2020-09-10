@@ -76,6 +76,16 @@ def Word_Cloud():
 def write():
     
     uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
+
+    components.html(f"""
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                
+                <div class="flex pb-8">    
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                        Word Frequency
+                    </div>
+                </div>
+    """,height=75)
     
     if uploaded_file is not None:
         
@@ -87,12 +97,6 @@ def write():
 
         components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-                
-                <div class="flex pb-8">    
-                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
-                        Word Frequency
-                    </div>
-                </div>
                 
                 <div class="flex">
                     <div class="flex rounded-md shadow-lg bg-blue-500  px-4 py-4 m-2">
@@ -188,7 +192,7 @@ def write():
         Word_Cloud()    
 
     else:
-        st.subheader('Please upload a csv file')
+        st.subheader('Upload data file!!')
 
 if __name__=="__main__":
     write()

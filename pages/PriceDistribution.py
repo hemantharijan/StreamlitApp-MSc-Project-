@@ -13,9 +13,9 @@ from scipy.stats import pearsonr
 
 
 df = pd.DataFrame()
-def carData(data):
+def carData(file):
     global df
-    df = pd.DataFrame(pd.read_csv(data,engine="python"))
+    df = pd.read_csv(file,engine="python")
     df= df.set_index('srno')
     return
 
@@ -75,11 +75,11 @@ def write():
                 </div>
     """,height=75)
 
-    data = st.sidebar.file_uploader('upload car data file', type='csv')
+    file = st.sidebar.file_uploader('upload car data file', type='csv')
     
-    if data is not None:    
+    if file is not None:    
         
-        carData(data)
+        carData(file)
         brandlist = df['Brand'].unique().tolist()
         #sorted_brandlist=brandlist.sort()
         brandlist.sort()
@@ -88,7 +88,7 @@ def write():
 
         brand_count = df_brand.shape
         ywmd = df_brand.loc[df_brand['Price_inEURO']==df_brand['Price_inEURO'].max()]
-        #print(ywmd)
+        print(ywmd)
         ywmd = ywmd.values.tolist()
 
         YearCorr()
@@ -128,27 +128,27 @@ def write():
                     <div >
                         <div class="text-l text-white"><span>Year with max Distribution</span></div>
                     </div>
-                    <div class="font-bold text-white text-xl pb-2"><span>{ywmd[0][2]}</span></div>
+                    <div class="font-bold text-white text-xl pb-2"><span>{ywmd[0][3]}</span></div>
                 </div>
 
                 <div class="overflow-hidden">
                     <div class="px-2 pt-2">
                         <div class="text-l text-white"><span>Model name</span></div>
                     </div>
-                    <div class="px-2 font-bold text-white text-xl pb-2"><span>{ywmd[0][1]}</span></div>
+                    <div class="px-2 font-bold text-white text-xl pb-2"><span>{ywmd[0][2]}</span></div>
                 </div>
 
                 <div class="overflow-hidden">
                     <div class="px-2 pt-2">
                         <div class="text-l text-white"><span>Km driven</span></div>
                     </div>
-                    <div class="px-2 font-bold text-white text-xl pb-2"><span>{ywmd[0][4]}</span></div>
+                    <div class="px-2 font-bold text-white text-xl pb-2"><span>{ywmd[0][5]}</span></div>
                 </div>
                 <div class="overflow-hidden">
                     <div class="px-2 pt-2">
                         <div class="text-l text-white"><span>Current Selling price</span></div>
                     </div>
-                    <div class="px-2 font-bold text-white text-xl pb-2"><span>{ywmd[0][5]}</span></div>
+                    <div class="px-2 font-bold text-white text-xl pb-2"><span>{ywmd[0][6]} €</span></div>
                 </div>
             </div>
             </div>""",height=180)
@@ -277,7 +277,7 @@ def write():
             st.plotly_chart(fig)
 
     else:
-        st.header('Please upload your data file')
+        st.subheader('Upload data file!!')
 
 
 if __name__=="__main__":

@@ -21,8 +21,9 @@ def range(data, first, last):
     return
 
 def countplot():
-    f = plt.figure(figsize=(10,4))
+    f = plt.figure(figsize=(7,7))
     sns.countplot(x=km_df['Km_Driven'], data=km_df)
+
     return st.pyplot()
 
 def scatterPlot():
@@ -74,7 +75,9 @@ def write():
 
         elif choice == 'Price over Kilometer':
             scatterPlot()
-            
+
+    else:
+        st.subheader('Upload data file!!')       
 
 
 if __name__=="__main__":

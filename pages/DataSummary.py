@@ -15,7 +15,6 @@ from streamlit_pandas_profiling import st_profile_report
 
 @st.cache
 def carData(data):
-
     df = pd.read_csv(data,engine="python")
     df= df.set_index('srno')
     return df
@@ -23,12 +22,22 @@ def carData(data):
 def write():
     
     data = st.sidebar.file_uploader('upload car data file', type='csv')
-    st.title('DataSet Summary')
+    components.html(f"""
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                
+                <div class="flex pb-8">    
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                        DataSet Summary
+                    </div>
+                </div>
+    """,height=75)
+    #st.title('DataSet Summary')
+    
     if data is not None:
         profile = ProfileReport(carData(data))
         st_profile_report(profile)     
     else:
-        st.header('Please upload your data file')
+        st.subheader('Upload data file!!')
 
 if __name__=="__main__":
     write()
