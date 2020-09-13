@@ -9,9 +9,13 @@ import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import streamlit.components.v1 as components
 import seaborn as sns
+import pickle
+import joblib
+import time
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.linear_model import LinearRegression 
 
 
 df_car = pd.DataFrame()
@@ -55,14 +59,15 @@ def price_pred(brand, yor, kmdriven, powerps, gearbox, fueltype, vehicletype):
     print('Brand label: '+str(brand_dict[brand])+' yor '+ str(yor) +' km '+ str(kmdriven) +' powerps '+ str(powerps) +' gearbox '+ str(gearbox_dict[gearbox]) +' fueltype '+ str(FuelType_dict[fueltype]) +' vehicletype '+ str(VehicleType_dict[vehicletype]))
 
     df_pred = pd.DataFrame(df_car)
+   # df_pred = df_pred.loc[df_pred['Brand']==brand]
     df_pred.drop(['Brand','Month_Of_Registration','Model','GearBox','FuelType','VehicleType','MOR label'], inplace=True, axis=1)
     df_pred.fillna(0, inplace=True)
 
-    car_features = ['Brand label','Year_Of_Registration','Km_Driven','PowerPS','GearBox label','FuelType label','VehicleType label']
+    car_features = ['Year_Of_Registration','Km_Driven','PowerPS','GearBox label','FuelType label','VehicleType label']
 
     X_Car = df_pred[car_features]
-    y_Car = df_pred['Brand label']
-    target_car = df_pred.Price_inEURO.values
+    y_Car = df_pred['Price_inEURO']
+    #target_car = df_pred.Price_inEURO.values
 
     X_train, X_test, y_train, y_test = train_test_split(X_Car, y_Car, random_state=10)
 
@@ -71,23 +76,17 @@ def price_pred(brand, yor, kmdriven, powerps, gearbox, fueltype, vehicletype):
     X_train_scale = scaler.fit_transform(X_train)
     X_test_scale = scaler.transform(X_test)
 
-    knn = KNeighborsClassifier(n_neighbors=100)
-    #knn = KNeighborsClassifier(n_neighbors = 5)
+    
+    start = time.time()
+    load_model = pickle.load(open('models\linear.pkl','rb'))
 
-    knn.fit(X_train_scale, y_train)
-
-    print('Accuracy of K-NN classifier on training set: {:.2f}'
-        .format(knn.score(X_train_scale, y_train)))
-    print('Accuracy of K-NN classifier on test set: {:.2f}' 
-        .format(knn.score(X_test_scale, y_test)))
-
-    example_car = [[brand_dict[brand], yor, kmdriven, powerps, gearbox_dict[gearbox], FuelType_dict[fueltype], VehicleType_dict[vehicletype]]]
+    example_car = [[yor, kmdriven, powerps, gearbox_dict[gearbox], FuelType_dict[fueltype], VehicleType_dict[vehicletype]]]
     example_car_scaled = scaler.transform(example_car)
-    print('Predicted Car price is ', target_car[knn.predict(example_car_scaled)[0]-1])
-
-    accuracy = "{:.2f}".format(knn.score(X_test_scale, y_test)*100)
-    pred_price = target_car[knn.predict(example_car_scaled)[0]-1]
-    accuracy = accuracy
+    print('Predicted Car price is ', load_model.predict(example_car_scaled))
+    end = time.time()
+    print(f"{end - start}")
+    
+    pred_price = load_model.predict(example_car_scaled)
     return
 
 
@@ -116,8 +115,8 @@ def write():
         yorlist.sort()
         year = st.selectbox('Year Of Registration',yorlist)
 
-        kmDriven = st.number_input('Km Driven')
-        powerPS = st.number_input('PowerPS')
+        kmDriven = st.number_input('Km Driven', min_value= 0.0, max_value= 200000.0)
+        powerPS = st.number_input('PowerPS', min_value=0.0, max_value=1500.0)
         
         gearboxlist = df_car['GearBox'].unique().tolist()
         gearboxlist.pop(2)
@@ -140,17 +139,9 @@ def write():
                     <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg bg-blue-500 px-4 py-4">
                         <span class="text-white text-xl pt-2">Predicted Price is:&nbsp&nbsp</span>
                         <div class="rounded-lg shadow-lg bg-white px-2 overflow-hidden py-2">
-                            <span class="text-blue-500 text-xl font-bold">{pred_price} €</span>
+                            <span class="text-blue-500 text-xl font-bold">{pred_price[0]} €</span>
                         </div>
                     </div>
-
-                    <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg bg-green-300 px-4 py-4">
-                        <span class="text-white text-xl pt-2">Accuracy on dataset:&nbsp&nbsp</span>
-                        <div class="rounded-lg shadow-lg bg-white px-2 overflow-hidden py-2">
-                            <span class="text-green-500 text-xl font-bold">{accuracy} %</span>
-                        </div>
-                    </div>
-
                 </div>
                 """)
               

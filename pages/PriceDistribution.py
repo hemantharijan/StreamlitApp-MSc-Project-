@@ -102,7 +102,9 @@ def write():
         if choice == "Year to Year":
             #print(choice)
             components.html(f"""
+            
             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+            
             <div class="flex rounded-lg shadow-lg overflow-hidden rounded-md bg-blue-500 px-4 py-4">
             <div class="flex flex-wrap gap-x-2  gap-y-2">
     
