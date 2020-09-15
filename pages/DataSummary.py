@@ -3,12 +3,8 @@ import awesome_streamlit as ast
 import numpy as np
 import pandas as pd
 import streamlit as st
-import plotly.express as px
-import matplotlib.pyplot as plt
-import plotly.figure_factory as ff
-import plotly.graph_objects as go
-
 import streamlit.components.v1 as components
+
 from pandas_profiling import  ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 
@@ -22,16 +18,15 @@ def carData(data):
 def write():
     
     data = st.sidebar.file_uploader('upload car data file', type='csv')
+    
     components.html(f"""
         <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-                
                 <div class="flex pb-8">    
-                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md 
+                    text-xl bg-blue-500 text-center px-4 py-4 m-2">
                         DataSet Summary
                     </div>
-                </div>
-    """,height=75)
-    #st.title('DataSet Summary')
+                </div>""",height=75)
     
     if data is not None:
         profile = ProfileReport(carData(data))

@@ -81,7 +81,8 @@ def write():
         <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 
                 <div class="flex pb-8">    
-                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md 
+                    text-xl bg-blue-500 text-center px-4 py-4 m-2">
                         Word Frequency
                     </div>
                 </div>
@@ -184,7 +185,8 @@ def write():
         components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex">
-                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold 
+                    rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
                     Word Cloud
                     </div>
                 </div>""",height=100)

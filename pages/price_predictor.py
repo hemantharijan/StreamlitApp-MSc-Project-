@@ -3,32 +3,26 @@ import awesome_streamlit as ast
 import numpy as np
 import pandas as pd
 import streamlit as st
-import plotly.express as px
-import matplotlib.pyplot as plt
-import plotly.figure_factory as ff
-import plotly.graph_objects as go
 import streamlit.components.v1 as components
-import seaborn as sns
 import pickle
-import joblib
 import time
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.linear_model import LinearRegression 
+from sklearn.preprocessing import StandardScaler
 
+#..................................................Logic....................................................#
 
 df_car = pd.DataFrame()
+
+pred_price = 0
+
 def data(file):
     global df_car
     df_car = pd.read_csv(file, engine='python')
     return
 
-pred_price = 0
-accuracy = 0
 def price_pred(brand, yor, kmdriven, powerps, gearbox, fueltype, vehicletype):
 
-    global pred_price, accuracy
+    global pred_price
     
     #Brand label list
     df_brand_list = df_car['Brand'].unique()
@@ -56,41 +50,44 @@ def price_pred(brand, yor, kmdriven, powerps, gearbox, fueltype, vehicletype):
     df_VehicleType_label_list.pop(6)
     VehicleType_dict = {df_VehicleType_list[i]:df_VehicleType_label_list[i] for i in range(len(df_VehicleType_list))}
     
-    print('Brand label: '+str(brand_dict[brand])+' yor '+ str(yor) +' km '+ str(kmdriven) +' powerps '+ str(powerps) +' gearbox '+ str(gearbox_dict[gearbox]) +' fueltype '+ str(FuelType_dict[fueltype]) +' vehicletype '+ str(VehicleType_dict[vehicletype]))
+    print('Brand label: '+str(brand_dict[brand])+' yor '+ str(yor) +' km '+ str(kmdriven) +' powerps '+ str(powerps) 
+            +' gearbox '+ str(gearbox_dict[gearbox]) +' fueltype '+ str(FuelType_dict[fueltype]) +' vehicletype '
+            + str(VehicleType_dict[vehicletype]))
 
+    #Droping nominal datas
     df_pred = pd.DataFrame(df_car)
-   # df_pred = df_pred.loc[df_pred['Brand']==brand]
-    df_pred.drop(['Brand','Month_Of_Registration','Model','GearBox','FuelType','VehicleType','MOR label'], inplace=True, axis=1)
+    df_pred.drop(['srno','Brand','Month_Of_Registration','Model','GearBox','FuelType','VehicleType','MOR label'],
+                    inplace=True, axis=1)
     df_pred.fillna(0, inplace=True)
-
-    car_features = ['Year_Of_Registration','Km_Driven','PowerPS','GearBox label','FuelType label','VehicleType label']
-
-    X_Car = df_pred[car_features]
-    y_Car = df_pred['Price_inEURO']
-    #target_car = df_pred.Price_inEURO.values
-
-    X_train, X_test, y_train, y_test = train_test_split(X_Car, y_Car, random_state=10)
-
-    scaler = MinMaxScaler()
-
-    X_train_scale = scaler.fit_transform(X_train)
-    X_test_scale = scaler.transform(X_test)
-
     
-    start = time.time()
-    load_model = pickle.load(open('models\linear.pkl','rb'))
+    #Collecting X and y data for training
+    X_Car = df_pred.drop('Price_inEURO', axis=1)
+    y_Car = df_pred['Price_inEURO']
+    
+    #spliting into train and test
+    X_train, X_test, y_train, y_test = train_test_split(X_Car, y_Car, test_size = 0.25, random_state=0)
 
-    example_car = [[yor, kmdriven, powerps, gearbox_dict[gearbox], FuelType_dict[fueltype], VehicleType_dict[vehicletype]]]
-    example_car_scaled = scaler.transform(example_car)
+    sc = StandardScaler()
+    X_train_scaled = sc.fit_transform(X_train)
+    X_test_scaled = sc.transform(X_test)
+
+    #XGBooster algorithm
+    start = time.time()
+    filename = r"models\xgbreg.pkl"
+    load_model = pickle.load(open(filename,'rb'))
+
+    #User defined features
+    example_car = [[brand_dict[brand], yor, kmdriven, powerps, gearbox_dict[gearbox], FuelType_dict[fueltype], 
+                    VehicleType_dict[vehicletype]]]
+    example_car_scaled = sc.transform(example_car)
     print('Predicted Car price is ', load_model.predict(example_car_scaled))
     end = time.time()
     print(f"{end - start}")
-    
-    pred_price = load_model.predict(example_car_scaled)
+    pred_price =load_model.predict(example_car_scaled)
     return
 
 
-
+#..................................................User-Interface....................................................#
 def write():
     
     file = st.sidebar.file_uploader('upload car data file', type='csv')
@@ -98,7 +95,8 @@ def write():
     components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex">
-                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md 
+                    text-xl bg-blue-500 text-center px-4 py-4 m-2">
                     Price Predictor
                     </div>
                 </div>
@@ -132,19 +130,29 @@ def write():
       
         if st.button('Predict'):
             price_pred(brandname, year, kmDriven, powerPS, gearbox, fueltype, vehicletype)
-            components.html(f"""
-                <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-                <div class = "flex gap-x-4">
-                    
-                    <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg bg-blue-500 px-4 py-4">
-                        <span class="text-white text-xl pt-2">Predicted Price is:&nbsp&nbsp</span>
-                        <div class="rounded-lg shadow-lg bg-white px-2 overflow-hidden py-2">
-                            <span class="text-blue-500 text-xl font-bold">{pred_price[0]} €</span>
+            if powerPS != 0 or kmDriven != 0:
+                components.html(f"""
+                    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                    <div class = "flex gap-x-4">
+                        
+                        <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg bg-blue-500 px-4 py-4">
+                            <span class="text-white text-xl pt-2">Predicted Price is:&nbsp&nbsp</span>
+                            <div class="rounded-lg shadow-lg bg-white px-2 overflow-hidden py-2">
+                                <span class="text-blue-500 text-xl font-bold">{"{:.2f}".format(pred_price[0])} €</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                """)
-              
+                    """)
+            else:
+                components.html(f"""
+                    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                    <div class = "flex gap-x-4">
+                        
+                        <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg bg-red-500 px-4 py-4">
+                            <span class="text-white text-xl">Km Driven or PowerPS cannot be zero</span>
+                        </div>
+                    </div>
+                    """)
     else:
         st.subheader('Upload data file!!')
 
