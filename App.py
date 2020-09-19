@@ -7,6 +7,7 @@ import pages.DataSummary
 import pages.PriceDistribution
 import pages.kmDistribution
 import pages.price_predictor
+import pages.CarBrands
 
 import streamlit.components.v1 as components
 
@@ -24,7 +25,7 @@ local_css("style.css")
 hide_streamlit_style = """
             <style>
             footer {visibility: hidden;}
-            fullscress {visibility:hidden;}
+            fullscreen {visibility:hidden;}
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
@@ -35,8 +36,8 @@ Menu1 = {
     "Data Summary": pages.DataSummary,
     "Price Distribution": pages.PriceDistribution,
     "Km Distribution": pages.kmDistribution,
-    "Price Predictor": pages.price_predictor
-}
+    "Brands": pages.CarBrands,
+    "Price Predictor": pages.price_predictor }
 
 def main():
     st.sidebar.title("Menu")
@@ -46,7 +47,6 @@ def main():
         with st.spinner(f"Loading Data..."):
             menu  =st.sidebar.title(selection)
             ast.shared.components.write_page(page)
-            #print(selection)
             
 if __name__=="__main__":
     main()

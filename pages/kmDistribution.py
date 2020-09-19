@@ -1,5 +1,4 @@
 import streamlit as st
-import awesome_streamlit as ast
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -26,10 +25,11 @@ def range(data, first, last):
 #Bar plot
 def countplot():
     
-    f = plt.figure(figsize=(7,7))
-    sns.countplot(x=km_df['Km_Driven'], data=km_df)
+    plt.figure(figsize=(7,7))
+    f = sns.countplot(x=km_df['Km_Driven'], data=km_df)
+    for p in f.patches:
+        f.annotate('{:.2f}'.format(p.get_height()), (p.get_x()+0.20, p.get_height()+1))
     return st.pyplot()
-
 
 #..................................................User-Interface....................................................#
 

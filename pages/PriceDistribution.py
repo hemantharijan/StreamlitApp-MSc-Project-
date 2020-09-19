@@ -91,7 +91,7 @@ def write():
 
         brand_count = df_brand.shape
         ywmd = df_brand.loc[df_brand['Price_inEURO']==df_brand['Price_inEURO'].max()]
-        print(ywmd)
+        #print(ywmd)
         ywmd = ywmd.values.tolist()
 
         YearCorr()
