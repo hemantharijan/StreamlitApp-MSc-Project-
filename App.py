@@ -18,8 +18,21 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 #CSS
 def local_css(file_name):
     with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+        st.markdown(f'<style>{f.read()}',
+         unsafe_allow_html=True)
 local_css("style.css")
+
+
+st.markdown(
+        f"""<style>
+        .reportview-container .main .block-container{{
+            max-width: 2000px;
+            padding-top: 0rem;
+            padding-right: 4rem;
+            padding-left: 4rem;
+            padding-bottom: 0rem;}}
+        </style>""", unsafe_allow_html=True,)
+
 
 #Hiding footer
 hide_streamlit_style = """

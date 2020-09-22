@@ -52,7 +52,7 @@ def Word_Freq():
 def Bar_chart():
     fig = px.bar(result_count, x='Word', y='Frequency',
              hover_data=['Word', 'Frequency'], color='Frequency',
-             labels={'Word':'Frequency'}, height=500, width=700)
+             labels={'Word':'Frequency'}, height=700, width=1100)
     
     return st.plotly_chart(fig)
 

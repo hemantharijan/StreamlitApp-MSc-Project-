@@ -13,3 +13,7 @@ body{
     background-image: linear-gradient(white,white);
     color: white;
 }
+
+.reportview-container .main .block-container{
+    max-width: 2000 px;
+}

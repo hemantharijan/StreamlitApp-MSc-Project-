@@ -108,7 +108,7 @@ def Pol_dist():
     fig = ff.create_distplot(hist_data, group_labels, show_hist=False, colors=colors)
     fig.update_layout(
         height= 700,
-        width=800
+        width=1100
     )
     return st.plotly_chart(fig)
     
@@ -169,7 +169,7 @@ def write():
         components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 
-                <div class="flex">
+                <div class="flex justify-center">
                     
                     <div class="rounded-lg shadow-lg overflow-hidden rounded-md bg-blue-500 px-4 py-4 ">
                         
