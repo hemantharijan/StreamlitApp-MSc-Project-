@@ -1,5 +1,4 @@
 import streamlit as st
-
 import awesome_streamlit as ast
 import pages.Sentiment
 import pages.WordFreq
@@ -8,7 +7,7 @@ import pages.PriceDistribution
 import pages.kmDistribution
 import pages.price_predictor
 import pages.CarBrands
-
+import pages.Models
 import streamlit.components.v1 as components
 
 ast.core.services.other.set_logging_format()
@@ -50,7 +49,9 @@ Menu1 = {
     "Price Distribution": pages.PriceDistribution,
     "Km Distribution": pages.kmDistribution,
     "Brands": pages.CarBrands,
-    "Price Predictor": pages.price_predictor }
+    "Models" : pages.Models,
+    "Price Predictor": pages.price_predictor,
+     }
 
 def main():
     st.sidebar.title("Menu")

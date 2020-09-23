@@ -37,7 +37,6 @@ def scatterPlot(x_variable, y_variable):
     x= x_variable,
     y= y_variable,
     mode='markers',
-    #height=700,
     marker=dict(
         size=8,
         color= df_brand['Price_inEURO'], 
@@ -46,7 +45,9 @@ def scatterPlot(x_variable, y_variable):
     )))
     fig.update_layout(
         xaxis_title='Year of Registration',
-        yaxis_title='Price in EURO')
+        yaxis_title='Price in EURO',
+        height=700,
+        width=1100,)
     return st.plotly_chart(fig)
 
 year_price_corr = 0.0
@@ -132,7 +133,7 @@ def write():
 
                     <div class="overflow-hidden px-6 pt-2">
                         <div >
-                            <div class="text-l text-white"><span>Year with max Distribution</span></div>
+                            <div class="text-l text-white"><span>Max distribution(Year)</span></div>
                         </div>
                         <div class="font-bold text-white text-xl pb-2"><span>{ywmd[0][3]}</span></div>
                     </div>
@@ -153,12 +154,12 @@ def write():
                     
                     <div class="overflow-hidden">
                         <div class="px-2 pt-2">
-                            <div class="text-l text-white"><span>Current Selling price</span></div>
+                            <div class="text-l text-white"><span>Current price</span></div>
                         </div>
                         <div class="px-2 font-bold text-white text-xl pb-2"><span>{ywmd[0][6]} €</span></div>
                     </div>
                 </div>
-            </div>""",height=180)
+            </div>""",height=100)
 
             year_of_registration = df_brand["Year_Of_Registration"]
             price = df_brand['Price_inEURO']
@@ -208,7 +209,7 @@ def write():
 
                     <div class="overflow-hidden px-4 pt-2">
                         <div >
-                            <div class="text-l text-white"><span>Month with max Distribution</span></div>
+                            <div class="text-l text-white"><span>Max Distribution(Month)</span></div>
                         </div>
                         <div class="font-bold text-white text-xl pb-2"><span>{mwmd[0][4]}</span></div>
                     </div>
@@ -229,12 +230,12 @@ def write():
                 
                     <div class="overflow-hidden">
                         <div class="px-2 pt-2">
-                            <div class="text-l text-white"><span>Current Selling price</span></div>
+                            <div class="text-l text-white"><span>Current price</span></div>
                         </div>
                         <div class="px-2 font-bold text-white text-xl pb-2"><span>{mwmd[0][6]} €</span></div>
                     </div>
                 </div>
-            </div>""",height=180)
+            </div>""",height=100)
 
             month_of_registration = df_brand_year["Month_Of_Registration"]
             price = df_brand_year['Price_inEURO']
@@ -255,6 +256,18 @@ def write():
             data = {'Years':years, 'Average Price':avg_price}
             avg_df = pd.DataFrame(data)
             avg_df.sort_values(by='Years',inplace=True)
+
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=avg_df['Years'], y=avg_df['Average Price'],
+                    mode='lines+markers',
+                    name='lines+markers'))
+            fig.update_layout(
+                xaxis_title ='Year of registration',
+                yaxis_title ='Average Price',
+                width = 1100,
+                height = 700
+            )
+            st.plotly_chart(fig)
 
             components.html(f"""
                 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -283,18 +296,6 @@ def write():
                     </div>
                 </div>
             </div>""",height=110)
-
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=avg_df['Years'], y=avg_df['Average Price'],
-                    mode='lines+markers',
-                    name='lines+markers'))
-            fig.update_layout(
-                xaxis_title ='Year of registration',
-                yaxis_title ='Average Price',
-                width = 750,
-                height = 380
-            )
-            st.plotly_chart(fig)
 
     else:
         st.subheader('Upload data file!!')

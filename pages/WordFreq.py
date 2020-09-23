@@ -99,7 +99,7 @@ def write():
         components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 
-                <div class="flex">
+                <div class="flex justify-center">
                     <div class="flex rounded-md shadow-lg bg-blue-500  px-4 py-4 m-2">
                         <span class="text-white font-bold text-lg">Top 10 words with maximum frequency<span>
 
@@ -139,7 +139,9 @@ def write():
                                     <span>{frequency[4]}</span>
                                 </div>
                             </div>     
+                        </div>
 
+                        <div class="flex flex-wrap justify-center pt-4 gap-x-2 gap-y-2">
                             <div class="bg-white rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[5]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">

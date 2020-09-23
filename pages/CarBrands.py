@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 import streamlit.components.v1 as components
@@ -33,7 +32,7 @@ def write():
                 <div class="flex">
                     <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold 
                     rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
-                    Brands
+                    Year to Year popularity and class
                     </div>
                 </div>
     """,height=75)
@@ -89,37 +88,6 @@ def write():
             """,height=200)
 
         elif choice == 'Class':           
-            components.html(f"""
-             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-                <div class="flex justify-center">
-                    
-                    <div class="rounded-md shadow-lg overflow-hidden bg-blue-500 rounded-md text-center px-4 py-4 m-2">
-                    <span class="text-white text-lg">Car class count</span>
-                    <div class="flex justify-center pt-2 gap-x-2">
-                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg bg-white">
-                        <div class="text-md text-blue-500 font-bold px-8 text-xl pt-4">Standard</div>
-                        <div class="text-center text-lg pb-2 text-blue-500">
-                            <span>72772</span>
-                        </div>
-                    </div>
-
-                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg bg-white">
-                       <div class="text-md text-blue-500 font-bold px-8 text-xl pt-4">Luxury</div>
-                        <div class="text-center text-lg pb-2 text-blue-500">
-                            <span>120877</span>
-                        </div>
-                    </div>
-
-                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg bg-white">
-                        <div class="text-md text-blue-500 font-bold px-8 text-xl pt-4">Ultra Luxury</div>
-                        <div class="text-center text-lg pb-2 text-blue-500">
-                            <span>25701</span>
-                        </div>
-                    </div>
-                </div>
-                    </div>
-                </div>
-            """,height=200)
 
             labels = ['Standard','Luxury','Ultra Luxury']
             values = [72772, 120877, 25701]

@@ -11,25 +11,25 @@ import seaborn as sns
 sns.set()
 
 #..................................................Logic....................................................#
-km_df = pd.DataFrame()
 df = pd.DataFrame()
 
 # Seperate data by specified range
-def range(data, first, last):
-    
-    global km_df, df
+def range(data):
+    global df
     df = pd.read_csv(data, engine='python')
-    km_df = df.query('Km_Driven >='+str(first)+'and Km_Driven <='+str(last))
     return
 
 #Bar plot
-def countplot():
-    
-    plt.figure(figsize=(7,7))
-    f = sns.countplot(x=km_df['Km_Driven'], data=km_df)
-    for p in f.patches:
-        f.annotate('{:.2f}'.format(p.get_height()), (p.get_x()+0.20, p.get_height()+1))
-    return st.pyplot()
+def countplot(start, end):
+    df_km_count = pd.DataFrame(df['Km_Driven'].value_counts())
+    df_km_count.reset_index(inplace=True)
+    df_km_count.columns = ['Km_Driven','count']
+    df_km_count.sort_values(by=['Km_Driven'], inplace=True)
+    Range = df_km_count.iloc[start:end]
+    fig = px.bar(Range, x='Km_Driven', y='count',  
+                hover_data=['Km_Driven','count'], color='count', height=620, width=1100
+    )
+    return st.plotly_chart(fig)
 
 #..................................................User-Interface....................................................#
 
@@ -51,20 +51,17 @@ def write():
 
         sub_menu = ['5k to 30k','40k to 70k','80k to 150k']
         choice = st.sidebar.radio("",sub_menu)
+        range(fileupload)
 
         if choice == '5k to 30k':
-            range(fileupload,5000,30000)
-            countplot()
+            countplot(0,4)
         elif choice == '40k to 70k':
-            range(fileupload,40000,70000)
-            countplot()
+            countplot(4,8)
         elif choice == '80k to 150k':
-            range(fileupload,80000,150000)
-            countplot()
+            countplot(8,13)
             
     else:
         st.subheader('Upload data file!!')       
-
 
 if __name__=="__main__":
     write()
