@@ -108,7 +108,10 @@ def Pol_dist():
     fig = ff.create_distplot(hist_data, group_labels, show_hist=False, colors=colors)
     fig.update_layout(
         height= 700,
-        width=1100
+        width=1100,   
+        paper_bgcolor='rgb(40,44,53)',
+        plot_bgcolor='rgb(40,44,53)',
+        font_color="white"
     )
     return st.plotly_chart(fig)
     
@@ -137,24 +140,24 @@ def write():
         components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 
-                <div class="flex justify-center  gap-x-2">
+                <div class="flex justify-center  gap-x-4">
                     
                     <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
-                        <div class="text-md px-8 pt-4">Positive Statements</div>
+                        <div class="text-md text-white px-8 pt-4">Positive Statements</div>
                         <div class="text-center font-bold text-2xl pb-2 text-blue-500">
                             <span>{positive_c[0]}</span>
                         </div>
                     </div>
 
                     <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
-                        <div class="text-md px-8 pt-4">Negative Statements</div>
+                        <div class="text-md text-white px-8 pt-4">Negative Statements</div>
                         <div class="text-center font-bold text-2xl pb-2 text-red-500">
                             <span>{negative_c[0]}</span>
                         </div>
                     </div>
 
                     <div class="max-w-sm overflow-hidden rounded-md shadow-lg">
-                        <div class="text-md px-8 pt-4">Neutral Statements</div>
+                        <div class="text-md text-white px-8 pt-4">Neutral Statements</div>
                         <div class="text-center font-bold text-2xl pb-2 text-gray-500">
                             <span>{neutral_c[0]}</span>
                         </div>
@@ -171,7 +174,7 @@ def write():
                 
                 <div class="flex justify-center">
                     
-                    <div class="rounded-lg shadow-lg overflow-hidden rounded-md bg-blue-500 px-4 py-4 ">
+                    <div class="rounded-lg shadow-lg overflow-hidden rounded-md px-4 py-4 ">
                         
                         <span class="text-white text-xl font-bold ">DataSet Overview</span>
                         

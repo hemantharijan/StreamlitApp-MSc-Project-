@@ -8,6 +8,7 @@ import pages.kmDistribution
 import pages.price_predictor
 import pages.CarBrands
 import pages.Models
+import pages.Features
 import streamlit.components.v1 as components
 
 ast.core.services.other.set_logging_format()
@@ -50,6 +51,7 @@ Menu1 = {
     "Km Distribution": pages.kmDistribution,
     "Brands": pages.CarBrands,
     "Models" : pages.Models,
+    "Features" : pages.Features,
     "Price Predictor": pages.price_predictor,
      }
 

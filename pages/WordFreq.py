@@ -52,7 +52,11 @@ def Word_Freq():
 def Bar_chart():
     fig = px.bar(result_count, x='Word', y='Frequency',
              hover_data=['Word', 'Frequency'], color='Frequency',
-             labels={'Word':'Frequency'}, height=700, width=1100)
+              height=700, width=1100)
+    fig.update_layout(
+        paper_bgcolor='rgb(40,44,53)',
+        font_color="white"  
+    )
     
     return st.plotly_chart(fig)
 
@@ -65,7 +69,7 @@ def Word_Cloud():
                                     ['','','','','','','','','','','','','','','',''], 
                                     regex=True).str.cat(sep=' ').split())
     wordcloud = WordCloud(max_font_size=150, width=1920, height=1080, colormap='brg',
-                      background_color='white').generate(' '.join(word))
+                      background_color='#282C35').generate(' '.join(word))
     plt.imshow(wordcloud)
     plt.axis('off')
     plt.tight_layout(pad = 0) 
@@ -100,40 +104,40 @@ def write():
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 
                 <div class="flex justify-center">
-                    <div class="flex rounded-md shadow-lg bg-blue-500  px-4 py-4 m-2">
-                        <span class="text-white font-bold text-lg">Top 10 words with maximum frequency<span>
+                    <div class="flex rounded-md shadow-xl px-4 py-4 m-2">
+                        <span class="text-blue-500 text-center font-bold text-lg">Top 10 words with maximum frequency<span>
 
                         <div class="flex flex-wrap justify-center pt-4 gap-x-2 gap-y-2">
                             
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[0]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[0]}</span>
                                 </div>
                             </div>     
 
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[1]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[1]}</span>
                                 </div>
                             </div>     
 
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[2]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[2]}</span>
                                 </div>
                             </div>     
 
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[3]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[3]}</span>
                                 </div>
                             </div>     
 
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[4]}</div>
                                 <div class="text-center font-bold text-lg pb-2 text-blue-500">
                                     <span>{frequency[4]}</span>
@@ -142,35 +146,35 @@ def write():
                         </div>
 
                         <div class="flex flex-wrap justify-center pt-4 gap-x-2 gap-y-2">
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[5]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[5]}</span>
                                 </div>
                             </div>     
 
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[6]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[6]}</span>
                                 </div>
                             </div>     
 
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[7]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[7]}</span>
                                 </div>
                             </div>     
 
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 text-indigo-700 pt-2">{words[8]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[8]}</span>
                                 </div>
                             </div>     
 
-                            <div class="bg-white rounded-md text-center shadow-lg">
+                            <div class="rounded-md text-center shadow-lg">
                                 <div class="text-sm px-10 pt-2 text-indigo-700">{words[9]}</div>
                                 <div class="text-center font-bold text-md pb-2 text-blue-500">
                                     <span>{frequency[9]}</span>
