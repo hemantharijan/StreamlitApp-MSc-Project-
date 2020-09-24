@@ -20,13 +20,14 @@ def write():
     data = st.sidebar.file_uploader('upload car data file', type='csv')
     
     components.html(f"""
-        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-                <div class="flex pb-8">    
-                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold rounded-md 
-                    text-xl bg-blue-500 text-center px-4 py-4 m-2">
-                        DataSet Summary
+             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+                <div class="flex">
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-gray-400 font-bold 
+                    rounded-md text-xl border-2 border-blue-500 text-center px-4 py-4 m-2">
+                    Data Summary
                     </div>
-                </div>""",height=75)
+                </div>
+    """,height=90)
     
     if data is not None:
         profile = ProfileReport(carData(data))

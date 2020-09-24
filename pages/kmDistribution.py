@@ -29,6 +29,11 @@ def countplot(start, end):
     fig = px.bar(Range, x='Km_Driven', y='count',  
                 hover_data=['Km_Driven','count'], color='count', height=620, width=1100
     )
+    fig.update_layout(  
+        paper_bgcolor='rgb(40,44,53)',
+        plot_bgcolor='rgb(40,44,53)',
+        font_color="white"
+    )
     return st.plotly_chart(fig)
 
 #..................................................User-Interface....................................................#
@@ -38,12 +43,12 @@ def write():
     components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex">
-                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-white font-bold 
-                    rounded-md text-xl bg-blue-500 text-center px-4 py-4 m-2">
-                    Kilometer Distribution
+                    <div class="flex-auto rounded-md shadow-lg overflow-hidden text-gray-400 font-bold 
+                    rounded-md text-xl border-2 border-blue-500 text-center px-4 py-4 m-2">
+                    Kilometer Analysis
                     </div>
                 </div>
-    """,height=75)
+    """,height=90)
 
     fileupload = st.sidebar.file_uploader('upload car data file', type='csv')
 

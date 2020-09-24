@@ -1,6 +1,6 @@
 body{
     background-color: #282C35;
-    color: #6a89cc;
+    color: white;
 }
 
 .sidebar .sidebar-content {
@@ -9,10 +9,7 @@ body{
     width: 300px;
 }
 
-.radio .radio-content {
-    background-image: linear-gradient(white,white);
-    color: white;
-}
+
 
 .reportview-container .main .block-container{
     max-width: 2000 px;
