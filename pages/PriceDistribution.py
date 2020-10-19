@@ -48,7 +48,8 @@ def scatterPlot(x_variable, y_variable):
         yaxis_title='Price in EURO',
         paper_bgcolor='rgb(40,44,53)',
         plot_bgcolor='rgb(40,44,53)',
-        font_color="white",
+        font_color="#1CFFCE",
+        font_size=13,
         height=700,
         width=1100,)
     return st.plotly_chart(fig)
@@ -73,6 +74,19 @@ def monthCorr():
 
 def write():
 
+    st.write(
+        """
+        <style type="text/css" media="screen">
+        div[role="listbox"] ul {
+            height:300px;
+            color:white;
+        }
+        </style>
+        """
+        ,
+        unsafe_allow_html=True,
+    )
+
     components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex">
@@ -88,9 +102,10 @@ def write():
     if file is not None:    
         
         carData(file)
+        st.subheader('Car Brand')
         brandlist = df['Brand'].unique().tolist()
         brandlist.sort()
-        brandname = st.selectbox('Select car brand',brandlist)
+        brandname = st.selectbox('',brandlist)
         brand(brandname)
 
         brand_count = df_brand.shape
@@ -101,7 +116,7 @@ def write():
         YearCorr()
         Menu1 = ["Year to Year","Month wise","Average distribution per year"]
             
-        choice = st.sidebar.radio("",Menu1)
+        choice = st.sidebar.selectbox("",Menu1)
 
         if choice == "Year to Year":
 
@@ -138,28 +153,28 @@ def write():
                         <div >
                             <div class="text-l text-blue-400"><span>Max distribution(Year)</span></div>
                         </div>
-                        <div class="font-bold text-blue-500 text-xl pb-2"><span>{ywmd[0][3]}</span></div>
+                        <div class="font-bold text-gray-500 text-xl pb-2"><span>{ywmd[0][3]}</span></div>
                     </div>
 
                     <div class="overflow-hidden">
                         <div class="px-2 pt-2">
                             <div class="text-l text-blue-400"><span>Model name</span></div>
                         </div>
-                        <div class="px-2 font-bold text-blue-500 text-xl pb-2"><span>{ywmd[0][2]}</span></div>
+                        <div class="px-2 font-bold text-gray-500 text-xl pb-2"><span>{ywmd[0][2]}</span></div>
                     </div>
 
                     <div class="overflow-hidden">
                         <div class="px-2 pt-2">
                             <div class="text-l text-blue-400"><span>Km driven</span></div>
                         </div>
-                        <div class="px-2 font-bold text-blue-500 text-xl pb-2"><span>{ywmd[0][5]}</span></div>
+                        <div class="px-2 font-bold text-gray-500 text-xl pb-2"><span>{ywmd[0][5]}</span></div>
                     </div>
                     
                     <div class="overflow-hidden">
                         <div class="px-2 pt-2">
                             <div class="text-l text-blue-400"><span>Current price</span></div>
                         </div>
-                        <div class="px-2 font-bold text-blue-500 text-xl pb-2"><span>{ywmd[0][6]} €</span></div>
+                        <div class="px-2 font-bold text-gray-500 text-xl pb-2"><span>{ywmd[0][6]} €</span></div>
                     </div>
                 </div>
             </div>""",height=130)
@@ -169,10 +184,10 @@ def write():
             scatterPlot(year_of_registration, price)
 
         elif choice == "Month wise":
-
+            st.subheader('Year')
             yearlist = df_brand['Year_Of_Registration'].unique().tolist()
             yearlist.sort()
-            Reg_year = st.selectbox("Select Year of registration",yearlist)
+            Reg_year = st.selectbox("",yearlist)
             
             month_wise(brandname, Reg_year)
             
@@ -263,7 +278,9 @@ def write():
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=avg_df['Years'], y=avg_df['Average Price'],
                     mode='lines+markers',
-                    name='lines+markers',))
+                    name='lines+markers',
+                    marker = dict(size=10,color='white'),
+                    line = dict(width=5, color='#636EFA'))),
             fig.update_layout(
                 xaxis_title ='Year of registration',
                 yaxis_title ='Average Price',
@@ -271,32 +288,33 @@ def write():
                 height = 700,
                 paper_bgcolor='rgb(40,44,53)',
                 plot_bgcolor='rgb(40,44,53)',
-                font_color="white"
+                font_color="#636EFA",
+                font_size=15
             )
             st.plotly_chart(fig)
 
             components.html(f"""
                 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex justify-center">    
-                    <div class="rounded-lg shadow-lg overflow-hidden rounded-md bg-blue-500 px-4 py-4">
+                    <div class="rounded-lg shadow-md overflow-hidden rounded-md px-4 py-4">
                         
                         <div class="flex flex-wrap gap-x-2  gap-y-2">    
                             
-                            <div class="rounded-md bg-white overflow-hidden shadow-lg">
+                            <div class="rounded-md overflow-hidden shadow-md">
                                 <div class="px-6 pt-2">
-                                    <div class="text-l text-center"><span>Min Average</span></div>
+                                    <div class="text-l text-blue-400 text-center"><span>Min Average</span></div>
                                 </div>
-                                <div class="px-6 font-bold text-xl pb-2">
+                                <div class="px-6 font-bold text-gray-400 text-xl pb-2">
                                     <span>{"{:.2f}".format(avg_df['Average Price'].min())}</span>
                                 </div>
                             </div>
     
-                        <div class="rounded-md bg-white overflow-hidden shadow-lg">
+                        <div class="rounded-md overflow-hidden shadow-md">
                             
                             <div class="px-6 pt-2">
-                                <div class="text-l text-center"><span>Max Average</span></div>
+                                <div class="text-l text-blue-400 text-center"><span>Max Average</span></div>
                             </div>
-                            <div class="px-6 font-bold text-xl pb-2"><span>{"{:.2f}".format(avg_df['Average Price'].max())}
+                            <div class="px-6 font-bold text-gray-400 text-xl pb-2"><span>{"{:.2f}".format(avg_df['Average Price'].max())}
                             </span></div>
                         </div>
                     </div>

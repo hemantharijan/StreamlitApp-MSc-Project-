@@ -14,7 +14,6 @@ import streamlit.components.v1 as components
 from numpy import cov
 from textblob import TextBlob
 from scipy.stats import pearsonr
-
 #....................................................Logic..........................................................
 
 #Sentiment Analysis Polarity and Subjectivity
@@ -108,14 +107,15 @@ def Pol_dist():
         width=1100,   
         paper_bgcolor='rgb(40,44,53)',
         plot_bgcolor='rgb(40,44,53)',
-        font_color="white"
+        font_color="white",
+        
     )
     return st.plotly_chart(fig)
     
 
 #..............................................................UI........................................................
 def write():
-    uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
+    uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv',key='sent')
     components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex">

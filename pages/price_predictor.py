@@ -89,6 +89,17 @@ def price_pred(brand, yor, kmdriven, powerps, gearbox, fueltype, vehicletype):
 
 #..................................................User-Interface....................................................#
 def write():
+    st.write(
+        """
+        <style type="text/css" media="screen">
+        div[role="listbox"] ul {
+            height:300px;
+        }
+        </style>
+        """
+        ,
+        unsafe_allow_html=True,
+    )
     
     file = st.sidebar.file_uploader('upload car data file', type='csv')
 
@@ -107,26 +118,33 @@ def write():
         
         brandlist = df_car['Brand'].unique().tolist()
         brandlist.sort()
-        brandname = st.selectbox('Brand',brandlist)
+        st.subheader('Car Brand')
+        brandname = st.selectbox('',brandlist)
         
         yorlist = df_car['Year_Of_Registration'].unique().tolist()
         yorlist.sort()
-        year = st.selectbox('Year Of Registration',yorlist)
+        st.subheader('Registration year')
+        year = st.selectbox('',yorlist)
 
-        kmDriven = st.number_input('Km Driven', min_value= 0.0, max_value= 200000.0)
-        powerPS = st.number_input('PowerPS', min_value=0.0, max_value=1500.0)
+        st.subheader('Km Driver')
+        kmDriven = st.number_input('', min_value= 0.0, max_value= 200000.0)
+        st.subheader('PowerPS')
+        powerPS = st.number_input('', min_value=0.0, max_value=1500.0)
         
+        st.subheader('Gear Box')
         gearboxlist = df_car['GearBox'].unique().tolist()
         gearboxlist.pop(2)
-        gearbox = st.selectbox('GearBox',gearboxlist)
+        gearbox = st.selectbox('',gearboxlist)
 
         fueltypelist = df_car['FuelType'].unique().tolist()
         fueltypelist.pop(2)
-        fueltype = st.selectbox('FuelType',fueltypelist)
+        st.subheader('Fuel Type')
+        fueltype = st.selectbox('',fueltypelist)
         
+        st.subheader('Vehicle type')
         vehicletypelist = df_car['VehicleType'].unique().tolist()
         vehicletypelist.pop(6)
-        vehicletype = st.selectbox('VehicleType',vehicletypelist)
+        vehicletype = st.selectbox('',vehicletypelist)
       
         if st.button('Predict'):
             price_pred(brandname, year, kmDriven, powerPS, gearbox, fueltype, vehicletype)
@@ -135,9 +153,9 @@ def write():
                     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                     <div class = "flex gap-x-4">
                         
-                        <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg bg-blue-500 px-4 py-4">
-                            <span class="text-white text-xl pt-2">Predicted Price is:&nbsp&nbsp</span>
-                            <div class="rounded-lg shadow-lg bg-white px-2 overflow-hidden py-2">
+                        <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg border-2 border-blue-400 px-4 py-4">
+                            <span class="text-gray-500 text-xl pt-2">Estimate Price:&nbsp&nbsp</span>
+                            <div class="rounded-lg shadow-md px-2 overflow-hidden py-2">
                                 <span class="text-blue-500 text-xl font-bold">{"{:.2f}".format(pred_price[0])} €</span>
                             </div>
                         </div>
@@ -148,8 +166,8 @@ def write():
                     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                     <div class = "flex gap-x-4">
                         
-                        <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg bg-red-500 px-4 py-4">
-                            <span class="text-white text-xl">Km Driven or PowerPS cannot be zero</span>
+                        <div class="flex flex-wrap rounded-lg overflow-hidden gap-x-2 shadow-lg border-2 border-red-400 px-4 py-4">
+                            <span class="text-red-500 text-xl">Km Driven or PowerPS cannot be zero</span>
                         </div>
                     </div>
                     """)

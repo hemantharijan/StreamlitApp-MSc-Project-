@@ -11,8 +11,6 @@ import pages.Models
 import pages.Features
 import streamlit.components.v1 as components
 
-ast.core.services.other.set_logging_format()
-
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
 #CSS
@@ -21,7 +19,6 @@ def local_css(file_name):
         st.markdown(f'<style>{f.read()}',
          unsafe_allow_html=True)
 local_css("style.css")
-
 
 st.markdown(
         f"""<style>
@@ -32,6 +29,7 @@ st.markdown(
             padding-left: 4rem;
             padding-bottom: 0rem;}}
         </style>""", unsafe_allow_html=True,)
+
 
 
 #Hiding footer
@@ -56,14 +54,28 @@ Menu1 = {
      }
 
 def main():
+    
     st.sidebar.title("Menu")
     selection = st.sidebar.radio("",list(Menu1.keys()))
     page = Menu1[selection]
     if selection is not False:
         with st.spinner(f"Loading Data..."):
+            st.write(
+        """
+        <style type="text/css" media="screen">
+        div[role="listbox"] ul {
+            height:300px;
+        }
+        </style>
+        """
+        ,
+        unsafe_allow_html=True,
+    )
+    
+
             menu  =st.sidebar.title(selection)
             ast.shared.components.write_page(page)
-            
+
 if __name__=="__main__":
     main()
 

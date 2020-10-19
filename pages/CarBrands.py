@@ -27,11 +27,23 @@ def Plot_Popular_brand(year):
     fig.update_layout(
         paper_bgcolor='rgb(40,44,53)',
         plot_bgcolor='rgb(40,44,53)',
-        font_color="white"
+        font_color="#2ED9FF",
+        font_size=14
     )
     return st.plotly_chart(fig)
+
 def write():
     
+    st.write(
+        """<style type="text/css" media="screen">
+            div[role="listbox"] ul {
+            height:300px;
+            color: white;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex">
@@ -54,7 +66,8 @@ def write():
         if choice == 'Popular':
             yearlist = df['Year_Of_Registration'].unique().tolist()
             yearlist.sort()
-            year = st.selectbox('Select year',yearlist)
+            st.subheader('Year')
+            year = st.selectbox('',yearlist)
             Plot_Popular_brand(year)
         
             top_three_brands = df_brand_count['Brands'].loc[0:2].tolist()
@@ -64,24 +77,25 @@ def write():
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
                 <div class="flex">
                     
-                    <div class="flex-auto rounded-md shadow-lg overflow-hidden bg-blue-500 rounded-md text-center px-4 py-4 m-2">
-                    <span class="text-white">Top three popular brands with no of cars sold in year {year}</span>
-                    <div class="flex justify-center pt-2 gap-x-2">
-                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg bg-white">
+                    <div class="flex-auto rounded-md shadow-md overflow-hidden rounded-md text-center px-4 py-4 m-2">
+                    <span class="text-blue-500">Top three popular brands with no of cars sold in year {year}</span>
+                    <div class="flex justify-center pt-2 gap-x-4">
+
+                    <div class="max-w-sm overflow-hidden rounded-md shadow-md">
                         <div class="text-md text-blue-500 font-bold px-8 text-xl pt-4">{top_three_brands[0]}</div>
                         <div class="text-center text-lg pb-2 text-blue-500">
                             <span>{top_three_brands_freq[0]}</span>
                         </div>
                     </div>
 
-                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg bg-white">
+                    <div class="max-w-sm overflow-hidden rounded-md shadow-md">
                        <div class="text-md text-blue-500 font-bold px-8 text-xl pt-4">{top_three_brands[1]}</div>
                         <div class="text-center text-lg pb-2 text-blue-500">
                             <span>{top_three_brands_freq[1]}</span>
                         </div>
                     </div>
 
-                    <div class="max-w-sm overflow-hidden rounded-md shadow-lg bg-white">
+                    <div class="max-w-sm overflow-hidden rounded-md shadow-md">
                         <div class="text-md text-blue-500 font-bold px-8 text-xl pt-4">{top_three_brands[2]}</div>
                         <div class="text-center text-lg pb-2 text-blue-500">
                             <span>{top_three_brands_freq[2]}</span>
@@ -108,5 +122,6 @@ def write():
 
     else:
         st.subheader('Upload data file!!')
+
 if __name__=="__main__":
     write()

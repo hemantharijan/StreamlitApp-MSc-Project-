@@ -1,15 +1,13 @@
 body{
     background-color: #282C35;
-    color: white;
+    color: #4299e1;
 }
 
 .sidebar .sidebar-content {
     background-image: linear-gradient( #4299e1,#4299e1);
-    color: white;
+    color:  white;
     width: 300px;
 }
-
-
 
 .reportview-container .main .block-container{
     max-width: 2000 px;

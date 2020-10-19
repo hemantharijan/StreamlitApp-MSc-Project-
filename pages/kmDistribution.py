@@ -32,7 +32,8 @@ def countplot(start, end):
     fig.update_layout(  
         paper_bgcolor='rgb(40,44,53)',
         plot_bgcolor='rgb(40,44,53)',
-        font_color="white"
+        font_color="#2ED9FF",
+        font_size=14
     )
     return st.plotly_chart(fig)
 
@@ -55,7 +56,7 @@ def write():
     if fileupload is not None:
 
         sub_menu = ['5k to 30k','40k to 70k','80k to 150k']
-        choice = st.sidebar.radio("",sub_menu)
+        choice = st.sidebar.selectbox("",sub_menu)
         range(fileupload)
 
         if choice == '5k to 30k':

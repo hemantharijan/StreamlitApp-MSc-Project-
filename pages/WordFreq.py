@@ -80,7 +80,7 @@ def Word_Cloud():
 #..........................................User InterFace....................................................#
 def write():
     
-    uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv')
+    uploaded_file = st.sidebar.file_uploader("Choose a csv file for analysis", type='csv', key='sent')
 
     components.html(f"""
              <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
