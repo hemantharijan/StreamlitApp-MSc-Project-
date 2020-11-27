@@ -6,7 +6,6 @@ import streamlit as st
 import streamlit.components.v1 as components
 import pickle
 import time
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 #..................................................Logic....................................................#
@@ -24,7 +23,8 @@ def price_pred(brand, yor, kmdriven, powerps, gearbox, fueltype, vehicletype):
 
     global pred_price
     
-    #Brand label list
+    #converting non numerical data into numerical 
+    #Brand label list 
     df_brand_list = df_car['Brand'].unique()
     df_brand_label_list = df_car['Brand label'].unique()
     brand_dict = {df_brand_list[i]: df_brand_label_list[i] for i in range(len(df_brand_list))}
@@ -50,35 +50,26 @@ def price_pred(brand, yor, kmdriven, powerps, gearbox, fueltype, vehicletype):
     df_VehicleType_label_list.pop(6)
     VehicleType_dict = {df_VehicleType_list[i]:df_VehicleType_label_list[i] for i in range(len(df_VehicleType_list))}
     
+    print(' ')
     print('Brand label: '+str(brand_dict[brand])+' yor '+ str(yor) +' km '+ str(kmdriven) +' powerps '+ str(powerps) 
             +' gearbox '+ str(gearbox_dict[gearbox]) +' fueltype '+ str(FuelType_dict[fueltype]) +' vehicletype '
             + str(VehicleType_dict[vehicletype]))
-
-    #Droping nominal datas
-    df_pred = pd.DataFrame(df_car)
-    df_pred.drop(['srno','Brand','Month_Of_Registration','Model','GearBox','FuelType','VehicleType','MOR label'],
-                    inplace=True, axis=1)
-    df_pred.fillna(0, inplace=True)
     
-    #Collecting X and y data for training
-    X_Car = df_pred.drop('Price_inEURO', axis=1)
-    y_Car = df_pred['Price_inEURO']
     
-    #spliting into train and test
-    X_train, X_test, y_train, y_test = train_test_split(X_Car, y_Car, test_size = 0.25, random_state=0)
-
-    sc = StandardScaler()
-    X_train_scaled = sc.fit_transform(X_train)
-    X_test_scaled = sc.transform(X_test)
-
     #XGBooster algorithm
     start = time.time()
-    filename = r"models\xgbreg.pkl"
-    load_model = pickle.load(open(filename,'rb'))
+    filename = r"models\xgb_reg_Expimental.pkl"
+    
+    X_train, load_model = pickle.load(open(filename,'rb'))  #loading trained data and trained model
 
-    #User defined features
-    example_car = [[brand_dict[brand], yor, kmdriven, powerps, gearbox_dict[gearbox], FuelType_dict[fueltype], 
-                    VehicleType_dict[vehicletype]]]
+    sc = StandardScaler()
+    sc.fit_transform(X_train)
+
+    example_car = [[ brand_dict[brand], yor, kmdriven, powerps,
+                     gearbox_dict[gearbox], FuelType_dict[fueltype], 
+                    VehicleType_dict[vehicletype] 
+                    ]] #User defined features
+                                        
     example_car_scaled = sc.transform(example_car)
     print('Predicted Car price is ', load_model.predict(example_car_scaled))
     end = time.time()

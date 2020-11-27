@@ -9,7 +9,6 @@ import pages.price_predictor
 import pages.CarBrands
 import pages.Models
 import pages.Features
-import streamlit.components.v1 as components
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
@@ -71,9 +70,8 @@ def main():
         ,
         unsafe_allow_html=True,
     )
-    
 
-            menu  =st.sidebar.title(selection)
+            st.sidebar.title(selection)
             ast.shared.components.write_page(page)
 
 if __name__=="__main__":
