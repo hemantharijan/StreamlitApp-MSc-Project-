@@ -124,7 +124,7 @@ def write():
             
             <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
             
-            <div class="flex rounded-lg shadow-md overflow-hidden mt-4 px-4 py-4">
+            <div class="flex justify-center rounded-lg shadow-md overflow-hidden mt-4 px-4 py-4">
                 <div class="flex flex-wrap gap-x-2  gap-y-2">
     
                     <div class="rounded-lg border-2 border-blue-400 overflow-hidden shadow-md">
@@ -142,16 +142,9 @@ def write():
                             {df_brand['Price_inEURO'].max()} €</span></div>
                     </div>
 
-                    <div class="rounded-lg overflow-hidden border-2 border-blue-400 shadow-md">
-                        <div class="px-6 pt-2">
-                            <div class="text-l text-blue-400 text-center"><span>Correlation</span></div>
-                        </div>
-                        <div class="px-6 font-bold text-xl text-blue-500 pb-2"><span>{"{:.3f}".format(year_price_corr)}</span></div>
-                    </div>
-
                     <div class="overflow-hidden px-6 pt-2">
                         <div >
-                            <div class="text-l text-blue-400"><span>Max distribution(Year)</span></div>
+                            <div class="text-l text-blue-400"><span>Year</span></div>
                         </div>
                         <div class="font-bold text-gray-500 text-xl pb-2"><span>{ywmd[0][3]}</span></div>
                     </div>
@@ -200,7 +193,7 @@ def write():
 
             components.html(f"""
                 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-                <div class="flex rounded-lg shadow-md overflow-hidden mt-4 px-4 py-4">
+                <div class="flex justify-center rounded-lg shadow-md overflow-hidden mt-4 px-4 py-4">
                     <div class="flex flex-wrap gap-x-2  gap-y-2">
     
                         <div class="rounded-md border-2 border-blue-400 overflow-hidden shadow-lg">
@@ -218,16 +211,9 @@ def write():
                             {df_brand_year['Price_inEURO'].max()} €</span></div>
                     </div>
 
-                    <div class="rounded-md  border-2 border-blue-400 overflow-hidden shadow-lg">
-                        <div class="px-6 pt-2">
-                            <div class="text-l text-blue-400 text-center"><span>Correlation</span></div>
-                        </div>
-                        <div class="px-6 font-bold text-blue-500 text-xl pb-2"><span>{"{:.3f}".format(month_price_corr)}</span></div>
-                    </div>
-
                     <div class="overflow-hidden px-4 pt-2">
                         <div >
-                            <div class="text-l text-blue-400"><span>Max Distribution(Month)</span></div>
+                            <div class="text-l text-blue-400"><span>Month</span></div>
                         </div>
                         <div class="font-bold text-gray-500 text-xl pb-2"><span>{mwmd[0][4]}</span></div>
                     </div>

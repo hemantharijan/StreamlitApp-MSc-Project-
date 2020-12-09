@@ -58,7 +58,7 @@ def price_pred(brand, yor, kmdriven, powerps, gearbox, fueltype, vehicletype):
     
     #XGBooster algorithm
     start = time.time()
-    filename = r"models\xgb_reg_Expimental.pkl"
+    filename = r"models\xgb_reg.pkl"
     
     X_train, load_model = pickle.load(open(filename,'rb'))  #loading trained data and trained model
 
@@ -118,7 +118,7 @@ def write():
         year = st.selectbox('',yorlist)
 
         st.subheader('Km Driver')
-        kmDriven = st.number_input('', min_value= 0.0, max_value= 200000.0)
+        kmDriven = st.number_input('', min_value= 1000.0, max_value= 200000.0)
         st.subheader('PowerPS')
         powerPS = st.number_input('', min_value=0.0, max_value=1500.0)
         

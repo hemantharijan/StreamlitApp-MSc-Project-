@@ -66,8 +66,7 @@ def main():
             height:300px;
         }
         </style>
-        """
-        ,
+        """,
         unsafe_allow_html=True,
     )
 
