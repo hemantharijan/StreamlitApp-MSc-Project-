@@ -41,9 +41,9 @@ hide_streamlit_style = """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
 Menu1 = {
+    "Data Summary": pages.DataSummary,
     "Sentiment Analysis":pages.Sentiment,
     "Word Frequency":pages.WordFreq,
-    "Data Summary": pages.DataSummary,
     "Price Distribution": pages.PriceDistribution,
     "Km Distribution": pages.kmDistribution,
     "Brands": pages.CarBrands,
